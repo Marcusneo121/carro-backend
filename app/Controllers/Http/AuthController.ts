@@ -29,7 +29,9 @@ export default class AuthController {
             // if (profile.password == payload["password"]) {
             if (passwordHashingVerify) {
 
-                const token = await auth.use('api').generate(profile)
+                const token = await auth.use('api').generate(profile, {
+                    expiresIn: '30 mins'
+                })
 
                 return response.status(200).json({
                     "data": profile,
@@ -69,5 +71,13 @@ export default class AuthController {
             "data": payload,
             "message": "Account registered succesfully"
         }
+    }
+
+    public async logout({ auth, response }) {
+        await auth.use('api').revoke()
+        return response.status(200).json({
+            "revoked": true,
+            "message": "Logout Succesfully"
+        })
     }
 }
