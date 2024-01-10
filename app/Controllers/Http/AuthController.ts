@@ -1,4 +1,5 @@
 import { schema } from '@ioc:Adonis/Core/Validator'
+import Profile from 'App/Models/Profile';
 import User from "App/Models/User";
 import Argon2 from "phc-argon2";
 
@@ -16,25 +17,29 @@ export default class AuthController {
         const password = payload.password;
         const email = payload.email;
 
-        const profile = await User.findBy("username", username)
+        const user = await User.findBy("username", username)
+        const profile = await Profile.findBy('id', user?.id)
 
-        if (!profile) {
+        if (!user) {
             return response.status(404).json({
                 "status": "error",
                 "message": "User not found",
             })
         } else {
 
-            const passwordHashingVerify = await Argon2.verify(profile.password, password);
+            const passwordHashingVerify = await Argon2.verify(user.password, password);
             // if (profile.password == payload["password"]) {
             if (passwordHashingVerify) {
 
-                const token = await auth.use('api').generate(profile, {
-                    expiresIn: '30 mins'
-                })
+                const token = await auth.use('api').generate(user
+                    // {expiresIn: '30 mins'}
+                )
 
                 return response.status(200).json({
-                    "data": profile,
+                    "data": {
+                        user,
+                        profile,
+                    },
                     "token": token,
                     "message": "Login Succesfully"
                 })
@@ -48,27 +53,55 @@ export default class AuthController {
     }
 
     public async register({ auth, response, request }) {
-        const newProfileSchema = schema.create({
+        const userSchema = schema.create({
+            isAdmin: schema.boolean(),
             username: schema.string(),
-            first_name: schema.string(),
-            last_name: schema.string(),
-            age: schema.number(),
             email: schema.string(),
             password: schema.string(),
+            first_name: schema.string(),
+            last_name: schema.string(),
+            address1: schema.string(),
+            address2: schema.string(),
+            address3: schema.string(),
+            age: schema.number(),
+            phone_number: schema.string(),
             date_of_birth: schema.date(),
             profile_image: schema.string.optional(),
         })
 
-        const payload = await request.validate({ schema: newProfileSchema })
+        const payloadData = await request.validate({ schema: userSchema })
 
         //No need to hash already the hashing already enabled in the User model when we "node ace make:auth"
-        // const hashedPassword = await Argon2.hash(payload.password)
-        // payload.password = hashedPassword;
+        // const hashedPassword = await Argon2.hash(payloadData.password)
+        // payloadData.password = hashedPassword;
 
-        await User.create(payload);
+        const userData = {
+            "role_id": payloadData.isAdmin === true ? 1 : 0,
+            "username": payloadData.username,
+            "email": payloadData.email,
+            "password": payloadData.password,
+        }
+
+        const user = await User.create(userData);
+        const profileData = {
+            "user_id": user.id,
+            "first_name": payloadData.first_name,
+            "last_name": payloadData.last_name,
+            "address1": payloadData.address1,
+            "address2": payloadData.address2,
+            "address3": payloadData.address3,
+            "age": payloadData.age,
+            "phone_number": payloadData.phone_number,
+            "date_of_birth": payloadData.date_of_birth,
+            "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
+        }
+        const profile = await Profile.create(profileData);
 
         return {
-            "data": payload,
+            "data": {
+                user,
+                profile
+            },
             "message": "Account registered succesfully"
         }
     }

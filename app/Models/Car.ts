@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 
-export default class Profile extends BaseModel {
+export default class Car extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -10,34 +10,46 @@ export default class Profile extends BaseModel {
   public userId: number
 
   @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  public owner: BelongsTo<typeof User>
 
   @column()
-  public first_name: string
+  public carName: string
 
   @column()
-  public last_name: string
+  public color: string
 
   @column()
-  public address1: string
+  public engineCapacity: string
 
   @column()
-  public address2: string
+  public yearMade: string
 
   @column()
-  public address3: string
+  public seat: string
 
   @column()
-  public age: number
+  public location: string
 
   @column()
-  public phoneNumber: string
+  public carMainPic: string
 
   @column()
-  public date_of_birth: Date
+  public carImageOne: string
 
   @column()
-  public profile_image: string //url
+  public carImageTwo: string
+
+  @column()
+  public carImageThree: string
+
+  @column()
+  public carImageFour: string
+
+  @column()
+  public availableFromDate: string
+
+  @column()
+  public availableToDate: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

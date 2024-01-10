@@ -6,15 +6,12 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
+      // table.integer('role_id').unsigned().references('id').inTable('roles').notNullable()
+      table.integer('role_id').notNullable()
+      table.string("username").notNullable()
       table.string('email', 255).notNullable().unique()
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
-      table.string("username").notNullable()
-      table.string("first_name").notNullable()
-      table.string("last_name").notNullable()
-      table.bigint("age").notNullable()
-      table.dateTime("date_of_birth").notNullable()
-      table.string("profile_image")
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

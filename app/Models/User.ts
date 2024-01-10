@@ -1,11 +1,19 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Argon2 from "phc-argon2";
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasMany, HasMany, belongsTo, BelongsTo, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import Favourite from './Favourite';
+import Role from './Role';
+import Profile from './Profile';
+import Car from './Car';
 
 export default class User extends BaseModel {
+
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public username: string
 
   @column()
   public email: string
@@ -14,31 +22,25 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
-  public username: string
-
-  @column()
-  public first_name: string
-
-  @column()
-  public last_name: string
-
-  @column()
-  public age: number
-
-  @column()
-  public date_of_birth: Date
-
-  @column()
-  public profile_image: string //url
-
-  @column()
   public rememberMeToken: string | null
+
+  @column()
+  public roleId: number
+
+  @belongsTo(() => Role)
+  public role: BelongsTo<typeof Role>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasOne(() => Profile)
+  public profile: HasOne<typeof Profile>
+
+  @hasMany(() => Car)
+  public car: HasMany<typeof Car>
 
   @beforeSave()
   public static async hashPassword(user: User) {
