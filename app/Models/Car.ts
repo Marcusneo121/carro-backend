@@ -46,10 +46,10 @@ export default class Car extends BaseModel {
   public carImageFour: string
 
   @column()
-  public availableFromDate: string
+  public availableFromDate: DateTime
 
   @column()
-  public availableToDate: string
+  public availableToDate: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
