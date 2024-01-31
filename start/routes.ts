@@ -19,7 +19,20 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+// import authConfig from 'Config/auth'
 
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+
+Route.post('/register', 'AuthController.register')
+Route.post('/login', 'AuthController.login')
+Route.group(() => {
+  Route.post('/logout', 'AuthController.logout')
+  Route.get('/car', 'CarsController.getCars')
+  Route.post('/car', 'CarsController.addCar')
+  Route.patch('/car/:id', 'CarsController.updateCar')
+  Route.get('/tester', 'TestersController.show')
+  Route.post('/tester', 'TestersController.store')
+}).middleware(['auth'])
