@@ -1,12 +1,13 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import Car from 'App/Models/Car'
-import Role from 'App/Models/Role'
+//import Role from 'App/Models/Role'
 import User from 'App/Models/User'
 
 export default class CarsController {
 
-    public async getCars({ auth, response, request }) {
+    // public async getCars({ auth, response, request }) {
+    public async getCars({ auth, response }) {
         await auth.use('api').authenticate()
         // const tokenUserData = auth.use('api').user
 

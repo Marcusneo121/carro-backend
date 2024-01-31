@@ -19,7 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import authConfig from 'Config/auth'
+// import authConfig from 'Config/auth'
 
 Route.get('/', async () => {
   return { hello: 'world' }

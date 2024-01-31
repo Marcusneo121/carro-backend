@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
-import Hash from '@ioc:Adonis/Core/Hash'
+//import Hash from '@ioc:Adonis/Core/Hash'
 import Argon2 from "phc-argon2";
 import { column, beforeSave, BaseModel, hasMany, HasMany, belongsTo, BelongsTo, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import Favourite from './Favourite';
+// import Favourite from './Favourite';
 import Role from './Role';
 import Profile from './Profile';
 import Car from './Car';

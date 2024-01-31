@@ -18,7 +18,8 @@ export default class TestersController {
         // };
     }
 
-    public async store({ response, request }) {
+    // public async store({ response, request }) {
+    public async store({ request }) {
 
         const newTesterSchema = schema.create({
             testerTitle: schema.string(),

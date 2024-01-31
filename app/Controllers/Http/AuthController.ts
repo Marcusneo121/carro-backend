@@ -15,7 +15,7 @@ export default class AuthController {
         const payload = await request.validate({ schema: newAuthSchema })
         const username = payload.username
         const password = payload.password;
-        const email = payload.email;
+        //const email = payload.email;
 
         const user = await User.findBy("username", username)
 
@@ -52,7 +52,8 @@ export default class AuthController {
         }
     }
 
-    public async register({ auth, response, request }) {
+    //public async register({ auth, response, request }) {
+    public async register({ request }) {
         const userSchema = schema.create({
             isAdmin: schema.boolean(),
             username: schema.string(),
