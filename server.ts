@@ -13,9 +13,9 @@
 import 'reflect-metadata'
 import sourceMapSupport from 'source-map-support'
 import { Ignitor } from '@adonisjs/core/build/standalone'
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { createServer } from 'https';
+// import { readFileSync } from 'fs';
+// import { join } from 'path';
+// import { createServer } from 'https';
 
 sourceMapSupport.install({ handleUncaughtExceptions: false })
 
