@@ -19,6 +19,8 @@ export default class extends BaseSchema {
       table.string('car_image_two')
       table.string('car_image_three')
       table.string('car_image_four')
+      table.string('car_plate')
+      table.string('price')
       table.timestamp('available_to_date')
       table.timestamp('available_from_date')
 

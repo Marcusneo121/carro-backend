@@ -16,6 +16,9 @@ export default class Car extends BaseModel {
   public carName: string
 
   @column()
+  public carPlate: string
+
+  @column()
   public color: string
 
   @column()
@@ -44,6 +47,9 @@ export default class Car extends BaseModel {
 
   @column()
   public carImageFour: string
+
+  @column()
+  public price: string
 
   @column()
   public availableFromDate: DateTime

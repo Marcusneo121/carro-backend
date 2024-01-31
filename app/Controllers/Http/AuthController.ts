@@ -18,7 +18,7 @@ export default class AuthController {
         const email = payload.email;
 
         const user = await User.findBy("username", username)
-        const profile = await Profile.findBy('id', user?.id)
+
 
         if (!user) {
             return response.status(404).json({
@@ -26,13 +26,13 @@ export default class AuthController {
                 "message": "User not found",
             })
         } else {
-
+            const profile = await Profile.findBy('id', user?.id)
             const passwordHashingVerify = await Argon2.verify(user.password, password);
             // if (profile.password == payload["password"]) {
             if (passwordHashingVerify) {
 
                 const token = await auth.use('api').generate(user
-                    // {expiresIn: '30 mins'}
+                    , { expiresIn: '7 days' }
                 )
 
                 return response.status(200).json({

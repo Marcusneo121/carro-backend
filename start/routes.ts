@@ -31,6 +31,7 @@ Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
+  Route.get('/car', 'CarsController.getCars')
   Route.post('/car', 'CarsController.addCar')
   Route.patch('/car/:id', 'CarsController.updateCar')
   Route.get('/tester', 'TestersController.show')

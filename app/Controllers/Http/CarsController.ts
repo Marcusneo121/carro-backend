@@ -5,6 +5,18 @@ import Role from 'App/Models/Role'
 import User from 'App/Models/User'
 
 export default class CarsController {
+
+    public async getCars({ auth, response, request }) {
+        await auth.use('api').authenticate()
+        // const tokenUserData = auth.use('api').user
+
+        const car = await Car.all();
+        return response.status(200).json({
+            data: car,
+            message: "Car list retrieved successfully"
+        })
+    }
+
     public async addCar({ auth, response, request }) {
         await auth.use('api').authenticate()
         const tokenUserData = auth.use('api').user
