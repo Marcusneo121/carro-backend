@@ -2,10 +2,13 @@
   "name": "carro_app_backend",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "21.6.0"
+  },
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "cd build && npm ci --production&& node server.js",
+    "start": "ENV_SILENT=true node ./build/server.js",
     "test": "node ace test",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
