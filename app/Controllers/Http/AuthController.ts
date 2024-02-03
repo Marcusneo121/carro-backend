@@ -53,63 +53,73 @@ export default class AuthController {
     }
 
     //public async register({ auth, response, request }) {
-    public async register({ request }) {
-        const userSchema = schema.create({
-            isAdmin: schema.boolean(),
-            username: schema.string(),
-            email: schema.string(),
-            password: schema.string(),
-            first_name: schema.string(),
-            last_name: schema.string(),
-            address1: schema.string(),
-            address2: schema.string(),
-            address3: schema.string(),
-            poscode: schema.string(),
-            city: schema.string(),
-            state: schema.string(),
-            age: schema.number(),
-            phone_number: schema.string(),
-            date_of_birth: schema.date(),
-            profile_image: schema.string.optional(),
-        })
+    public async register({ response, request }) {
 
-        const payloadData = await request.validate({ schema: userSchema })
+        try {
+            const userSchema = schema.create({
+                isAdmin: schema.boolean(),
+                username: schema.string(),
+                email: schema.string(),
+                password: schema.string(),
+                first_name: schema.string(),
+                last_name: schema.string(),
+                address1: schema.string(),
+                address2: schema.string(),
+                address3: schema.string(),
+                poscode: schema.string(),
+                city: schema.string(),
+                state: schema.string(),
+                age: schema.number(),
+                phone_number: schema.string(),
+                date_of_birth: schema.date(),
+                profile_image: schema.string.optional(),
+            })
 
-        //No need to hash already the hashing already enabled in the User model when we "node ace make:auth"
-        // const hashedPassword = await Argon2.hash(payloadData.password)
-        // payloadData.password = hashedPassword;
+            const payloadData = await request.validate({ schema: userSchema })
 
-        const userData = {
-            "role_id": payloadData.isAdmin === true ? 1 : 0,
-            "username": payloadData.username,
-            "email": payloadData.email,
-            "password": payloadData.password,
-        }
+            //No need to hash already the hashing already enabled in the User model when we "node ace make:auth"
+            // const hashedPassword = await Argon2.hash(payloadData.password)
+            // payloadData.password = hashedPassword;
 
-        const user = await User.create(userData);
-        const profileData = {
-            "user_id": user.id,
-            "first_name": payloadData.first_name,
-            "last_name": payloadData.last_name,
-            "address1": payloadData.address1,
-            "address2": payloadData.address2,
-            "address3": payloadData.address3,
-            "poscode": payloadData.poscode,
-            "city": payloadData.city,
-            "state": payloadData.state,
-            "age": payloadData.age,
-            "phone_number": payloadData.phone_number,
-            "date_of_birth": payloadData.date_of_birth,
-            "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
-        }
-        const profile = await Profile.create(profileData);
+            const userData = {
+                "role_id": payloadData.isAdmin === true ? 1 : 0,
+                "username": payloadData.username,
+                "email": payloadData.email,
+                "password": payloadData.password,
+            }
 
-        return {
-            "data": {
-                user,
-                profile
-            },
-            "message": "Account registered succesfully"
+            const user = await User.create(userData);
+            const profileData = {
+                "user_id": user.id,
+                "first_name": payloadData.first_name,
+                "last_name": payloadData.last_name,
+                "address1": payloadData.address1,
+                "address2": payloadData.address2,
+                "address3": payloadData.address3,
+                "poscode": payloadData.poscode,
+                "city": payloadData.city,
+                "state": payloadData.state,
+                "age": payloadData.age,
+                "phone_number": payloadData.phone_number,
+                "date_of_birth": payloadData.date_of_birth,
+                "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
+            }
+            const profile = await Profile.create(profileData);
+
+
+            return response.status(200).json({
+                "data": {
+                    user,
+                    profile
+                },
+                "status": "ok",
+                "message": "Account registered succesfully"
+            })
+        } catch (error) {
+            return response.status(404).json({
+                "status": "error",
+                "message": "Account register failed. Please try again."
+            })
         }
     }
 
