@@ -144,7 +144,7 @@ export default class AuthController {
         if (user) {
             return response.status(404).json({
                 "status": "error",
-                "message": "Username already registered. Please try other username.",
+                "message": "Username already taken. Please try other username.",
             })
         } else {
             return response.status(200).json({
