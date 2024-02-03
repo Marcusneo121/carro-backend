@@ -142,7 +142,7 @@ export default class AuthController {
         const user = await User.findBy("username", username)
 
         if (user) {
-            return response.status(404).json({
+            return response.status(200).json({
                 "status": "error",
                 "message": "Username already taken. Please try other username.",
             })
@@ -165,7 +165,7 @@ export default class AuthController {
         const user = await User.findBy("email", email)
 
         if (user) {
-            return response.status(404).json({
+            return response.status(200).json({
                 "status": "error",
                 "message": "Email already registered. Please login with this email.",
             })
