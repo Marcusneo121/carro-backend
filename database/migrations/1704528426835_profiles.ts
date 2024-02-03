@@ -13,9 +13,6 @@ export default class extends BaseSchema {
       table.string("address1")
       table.string("address2")
       table.string("address3")
-      table.string("poscode")
-      table.string("city")
-      table.string("state")
       table.bigint("age")
       table.string("phone_number")
       table.dateTime("date_of_birth")
@@ -26,6 +23,12 @@ export default class extends BaseSchema {
        */
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
+    })
+
+    this.schema.alterTable(this.tableName, (table) => {
+      table.string("poscode")
+      table.string("city")
+      table.string("state")
     })
   }
 
