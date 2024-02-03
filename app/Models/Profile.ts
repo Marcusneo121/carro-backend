@@ -28,6 +28,15 @@ export default class Profile extends BaseModel {
   public address3: string
 
   @column()
+  public poscode: string
+
+  @column()
+  public city: string
+
+  @column()
+  public state: string
+
+  @column()
   public age: number
 
   @column()
