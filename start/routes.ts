@@ -25,9 +25,10 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-
-Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
+Route.post('/register', 'AuthController.register')
+Route.post('/register/checkUsername', 'AuthController.checkUsername')
+Route.post('/register/checkEmail', 'AuthController.checkEmail')
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/car', 'CarsController.getCars')

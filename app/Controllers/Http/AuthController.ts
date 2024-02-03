@@ -120,4 +120,50 @@ export default class AuthController {
             "message": "Logout Succesfully"
         })
     }
+
+    public async checkUsername({ response, request }) {
+        const usernameSchema = schema.create({
+            username: schema.string(),
+        })
+
+        const payload = await request.validate({ schema: usernameSchema })
+        const username = payload.username
+
+        const user = await User.findBy("username", username)
+
+        if (user) {
+            return response.status(404).json({
+                "status": "error",
+                "message": "Username already registered. Please try other username.",
+            })
+        } else {
+            return response.status(200).json({
+                "status": "ok",
+                "message": "Username not registered yet. Able to register.",
+            })
+        }
+    }
+
+    public async checkEmail({ response, request }) {
+        const emailSchema = schema.create({
+            email: schema.string(),
+        })
+
+        const payload = await request.validate({ schema: emailSchema })
+        const email = payload.email
+
+        const user = await User.findBy("email", email)
+
+        if (user) {
+            return response.status(404).json({
+                "status": "error",
+                "message": "Email already registered. Please login with this email.",
+            })
+        } else {
+            return response.status(200).json({
+                "status": "ok",
+                "message": "Email not registered yet. Able to register.",
+            })
+        }
+    }
 }
