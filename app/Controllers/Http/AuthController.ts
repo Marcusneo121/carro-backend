@@ -231,10 +231,10 @@ export default class AuthController {
         });
     }
 
-    public async verifyEmail({view, params }) {
+    public async verifyEmail({ view, params }) {
 
         try {
-            const findUser = await User.findBy('id', params.email);
+            const findUser = await User.findBy('email', params.email);
             if (!findUser) {
                 return view.render('email_verify_fail')
                 // return response.status(404).json({
