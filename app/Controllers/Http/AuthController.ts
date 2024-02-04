@@ -3,6 +3,12 @@ import Profile from 'App/Models/Profile';
 import User from "App/Models/User";
 import Argon2 from "phc-argon2";
 
+import Env from '@ioc:Adonis/Core/Env'
+import path from 'path';
+import nodemailer from "nodemailer"
+// import hbs from 'nodemailer-express-handlebars'
+const hbs = require('nodemailer-express-handlebars');
+
 
 export default class AuthController {
     public async login({ auth, response, request }) {
@@ -52,9 +58,10 @@ export default class AuthController {
         }
     }
 
+
+
     //public async register({ auth, response, request }) {
     public async register({ response, request }) {
-
         try {
             const userSchema = schema.create({
                 isAdmin: schema.boolean(),
@@ -105,7 +112,6 @@ export default class AuthController {
                 "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
             }
             const profile = await Profile.create(profileData);
-
 
             return response.status(200).json({
                 "data": {
@@ -175,5 +181,53 @@ export default class AuthController {
                 "message": "Email not registered yet. Able to register.",
             })
         }
+    }
+
+    public async sendEmail({ response, params }) {
+        const emailTransporter = nodemailer.createTransport({
+            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: Env.get('EMAIL_USER'),
+                pass: Env.get('EMAIL_PASSWORD')
+            },
+            logger: true
+        })
+
+        const handlebarOptions = {
+            viewEngine: {
+                extName: ".handlebars",
+                partialsDir: path.resolve('./resources/views'),
+                defaultLayout: false,
+            },
+            viewPath: path.resolve('./resources/views'),
+            extName: ".handlebars",
+        }
+
+        emailTransporter.use('compile', hbs(handlebarOptions));
+
+        const email = {
+            from: {
+                name: "Carro Car Sharing",
+                address: Env.get('EMAIL_USER')
+            },
+            to: params.email,
+            subject: "Carro Email Address Verification",
+            template: 'email_verification',
+            context: {
+                email: params.email,
+            }
+        };
+
+        await emailTransporter.sendMail(email).then(() => {
+            return response.status(200).json({
+                "status": "ok",
+                "message": "Email sent",
+            });
+        }).catch(error => {
+            console.error(error);
+        });
     }
 }

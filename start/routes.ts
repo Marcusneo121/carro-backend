@@ -25,8 +25,12 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+
+// Route.on('/register/email-verification-carro').render("email_verification");
+
 Route.post('/login', 'AuthController.login')
 Route.post('/register', 'AuthController.register')
+Route.post('/register/sendEmail/:email', 'AuthController.sendEmail')
 Route.post('/register/checkUsername', 'AuthController.checkUsername')
 Route.post('/register/checkEmail', 'AuthController.checkEmail')
 Route.group(() => {

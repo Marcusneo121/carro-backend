@@ -21,7 +21,8 @@
     "./providers/AppProvider",
     "@adonisjs/core",
     "@adonisjs/lucid",
-    "@adonisjs/auth"
+    "@adonisjs/auth",
+    "@adonisjs/view"
   ],
   "aceProviders": [
     "@adonisjs/repl"
@@ -41,6 +42,10 @@
     "@japa/preset-adonis/TestsProvider"
   ],
   "metaFiles": [
-    "cert/*"
+    "cert/*",
+    {
+      "pattern": "resources/views/**/*.edge",
+      "reloadServer": false
+    }
   ]
 }
