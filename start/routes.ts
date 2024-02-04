@@ -26,8 +26,7 @@ Route.get('/', async () => {
 })
 
 
-// Route.on('/register/email-verification-carro').render("email_verification");
-
+Route.get('/register/carro-verify-email-account/:email', 'AuthController.verifyEmail');
 Route.post('/login', 'AuthController.login')
 Route.post('/register', 'AuthController.register')
 Route.post('/register/sendEmail/:email', 'AuthController.sendEmail')

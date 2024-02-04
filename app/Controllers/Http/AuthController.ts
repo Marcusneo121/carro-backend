@@ -230,4 +230,37 @@ export default class AuthController {
             console.error(error);
         });
     }
+
+    public async verifyEmail({view, params }) {
+
+        try {
+            const findUser = await User.findBy('id', params.email);
+            if (!findUser) {
+                return view.render('email_verify_fail')
+                // return response.status(404).json({
+                //     "status": "error",
+                //     "message": "Error",
+                // })
+            }
+
+            const findProfile = await Profile.findBy('user_id', findUser.id);
+
+            if (!findProfile) {
+                return view.render('email_verify_fail')
+                // return response.status(404).json({
+                //     "status": "error",
+                //     "message": "User not found",
+                // })
+            } else {
+                await Profile.query().where('user_id', findUser.id).update({ "is_email_verified": true });
+                return view.render('email_verify_success')
+                // return response.status(200).json({
+                //     "data": payload,
+                //     "message": "Car updated",
+                // })
+            }
+        } catch (error) {
+            return view.render('email_verify_error')
+        }
+    }
 }
