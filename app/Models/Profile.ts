@@ -37,6 +37,9 @@ export default class Profile extends BaseModel {
   public state: string
 
   @column()
+  public is_email_verified: boolean
+
+  @column()
   public age: number
 
   @column()

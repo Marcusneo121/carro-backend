@@ -20,7 +20,7 @@ export default class extends BaseSchema {
       table.string("phone_number")
       table.dateTime("date_of_birth")
       table.string("profile_image")
-      // table.boolean("is_email_verified")
+      table.boolean("is_email_verified")
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
