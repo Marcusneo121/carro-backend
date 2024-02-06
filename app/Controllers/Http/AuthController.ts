@@ -9,7 +9,27 @@ import nodemailer from "nodemailer"
 // import hbs from 'nodemailer-express-handlebars'
 const hbs = require('nodemailer-express-handlebars');
 
+const emailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: Env.get('EMAIL_USER'),
+        pass: Env.get('EMAIL_PASSWORD')
+    },
+    logger: true
+})
 
+const handlebarOptions = {
+    viewEngine: {
+        extName: ".handlebars",
+        partialsDir: path.resolve('./resources/views'),
+        defaultLayout: false,
+    },
+    viewPath: path.resolve('./resources/views'),
+    extName: ".handlebars",
+}
 export default class AuthController {
     public async login({ auth, response, request }) {
 
@@ -33,31 +53,45 @@ export default class AuthController {
             })
         } else {
             const profile = await Profile.findBy('id', user?.id)
-            const passwordHashingVerify = await Argon2.verify(user.password, password);
-            // if (profile.password == payload["password"]) {
-            if (passwordHashingVerify) {
 
-                const token = await auth.use('api').generate(user
-                    , { expiresIn: '7 days' }
-                )
-
-                return response.status(200).json({
-                    "data": {
-                        user,
-                        profile,
-                    },
-                    "token": token,
-                    "message": "Login Succesfully"
-                })
-            } else {
+            if (!profile) {
                 return response.status(404).json({
                     "status": "error",
-                    "message": "Password is incorrect",
+                    "message": "User not found",
                 })
+            } else {
+                if (profile.is_email_verified == false) {
+                    return response.status(404).json({
+                        "status": "error",
+                        "message": "Account is not verified. Please go to your email to verify your account.",
+                    })
+                } else {
+                    const passwordHashingVerify = await Argon2.verify(user.password, password);
+                    // if (profile.password == payload["password"]) {
+                    if (passwordHashingVerify) {
+
+                        const token = await auth.use('api').generate(user
+                            , { expiresIn: '7 days' }
+                        )
+
+                        return response.status(200).json({
+                            "data": {
+                                user,
+                                profile,
+                            },
+                            "token": token,
+                            "message": "Login Succesfully"
+                        })
+                    } else {
+                        return response.status(404).json({
+                            "status": "error",
+                            "message": "Password is incorrect",
+                        })
+                    }
+                }
             }
         }
     }
-
 
 
     //public async register({ auth, response, request }) {
@@ -113,14 +147,34 @@ export default class AuthController {
             }
             const profile = await Profile.create(profileData);
 
-            return response.status(200).json({
-                "data": {
-                    user,
-                    profile
+            emailTransporter.use('compile', hbs(handlebarOptions));
+
+            const email = {
+                from: {
+                    name: "Carro Car Sharing",
+                    address: Env.get('EMAIL_USER')
                 },
-                "status": "ok",
-                "message": "Account registered succesfully"
-            })
+                to: user.email,
+                subject: "Carro Email Address Verification",
+                template: 'email_verification',
+                context: {
+                    email: user.email,
+                }
+            };
+
+            await emailTransporter.sendMail(email).then(() => {
+                return response.status(200).json({
+                    "data": {
+                        user,
+                        profile
+                    },
+                    "email-verification": "Email verification sent",
+                    "status": "ok",
+                    "message": "Account registered succesfully"
+                })
+            }).catch(error => {
+                console.error(error);
+            });
         } catch (error) {
             return response.status(404).json({
                 "status": "error",
@@ -184,28 +238,6 @@ export default class AuthController {
     }
 
     public async sendEmail({ response, params }) {
-        const emailTransporter = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            auth: {
-                user: Env.get('EMAIL_USER'),
-                pass: Env.get('EMAIL_PASSWORD')
-            },
-            logger: true
-        })
-
-        const handlebarOptions = {
-            viewEngine: {
-                extName: ".handlebars",
-                partialsDir: path.resolve('./resources/views'),
-                defaultLayout: false,
-            },
-            viewPath: path.resolve('./resources/views'),
-            extName: ".handlebars",
-        }
-
         emailTransporter.use('compile', hbs(handlebarOptions));
 
         const email = {
