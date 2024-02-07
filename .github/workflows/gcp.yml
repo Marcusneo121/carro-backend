@@ -36,8 +36,8 @@ jobs:
 
     - name: Push Docker Image to Artifact Registry
       run: |-
-        docker tag carro-backend-api us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api
+        docker tag carro-backend-api us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api
 
         
 
