@@ -10,12 +10,15 @@ jobs:
     env:
       IMAGE_NAME: carro-app-backend
       PROJECT_ID: pro-bliss-413511
+      DOCKER_BUILDKIT: 1
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
+      with:
+          platforms: "linux/amd64"
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3   
@@ -31,7 +34,7 @@ jobs:
         docker buildx build --platform linux/amd64 -t carro-backend-api:latest .
 
     - name: Debug - List Docker Images
-      run: docker images  
+      run: docker images ls
 
     - name: Configure Docker Client
       run: |-
