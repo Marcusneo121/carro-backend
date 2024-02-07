@@ -21,7 +21,7 @@ jobs:
         export_default_credentials: true
 
     - name: Build Docker Image
-      run: docker buildx build --platform linux/amd64 -t carro-backend-api:latest .
+      run: docker buildx build --platform linux/amd64 -t carro-backend-api .
 
     - name: Configure Docker Client
       run: |-
@@ -36,8 +36,10 @@ jobs:
 
     - name: Push Docker Image to Artifact Registry
       run: |-
-        docker tag carro-backend-api:latest us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api:latest
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api:latest
+        docker tag carro-backend-api us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/carro-backend-api/carro-backend-api
+
+        
 
     # - name: Push Docker Image to Container Registry (GCR)
     #   env:
