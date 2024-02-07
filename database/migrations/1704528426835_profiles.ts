@@ -13,10 +13,14 @@ export default class extends BaseSchema {
       table.string("address1")
       table.string("address2")
       table.string("address3")
+      table.string("poscode")
+      table.string("city")
+      table.string("state")
       table.bigint("age")
       table.string("phone_number")
       table.dateTime("date_of_birth")
       table.string("profile_image")
+      table.boolean("is_email_verified")
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

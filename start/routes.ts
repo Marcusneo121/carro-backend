@@ -26,8 +26,12 @@ Route.get('/', async () => {
 })
 
 
-Route.post('/register', 'AuthController.register')
+Route.get('/register/carro-verify-email-account/:email', 'AuthController.verifyEmail');
 Route.post('/login', 'AuthController.login')
+Route.post('/register', 'AuthController.register')
+Route.post('/register/sendEmail/:email', 'AuthController.sendEmail')
+Route.post('/register/checkUsername', 'AuthController.checkUsername')
+Route.post('/register/checkEmail', 'AuthController.checkEmail')
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/car', 'CarsController.getCars')

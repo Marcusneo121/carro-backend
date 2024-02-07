@@ -1,0 +1,13 @@
+version: "1"
+services:
+  db: 
+    image: postgres:15.2
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    ports:
+      - $DB_PORT:$DB_PORT
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    restart: always
+    command: -p $DB_PORT

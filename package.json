@@ -1,11 +1,15 @@
 {
-  "name": "carro-app-backend",
+  "name": "carro_app_backend",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "21.6.0"
+  },
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "node server.js",
+    "migration": "node ace migration:run --force",
+    "start": "ENV_SILENT=true node ./build/server.js",
     "test": "node ace test",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
@@ -59,7 +63,14 @@
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/lucid": "^18.4.2",
     "@adonisjs/repl": "^3.1.11",
+    "@adonisjs/session": "^6.4.0",
+    "@adonisjs/shield": "^7.1.1",
+    "@adonisjs/view": "^6.2.0",
+    "@types/nodemailer": "^6.4.14",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "luxon": "^3.4.4",
+    "nodemailer": "^6.9.9",
+    "nodemailer-express-handlebars": "^6.1.0",
     "pg": "^8.11.3",
     "phc-argon2": "^1.1.4",
     "proxy-addr": "^2.0.7",
