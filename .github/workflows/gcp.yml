@@ -23,7 +23,7 @@ jobs:
     # - name: Build Docker Image
     #   run: docker buildx build --platform linux/amd64 -t carro-backend-api:latest .
 
-      - name: Set up QEMU
+    - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         
       - name: Set up Docker Buildx
@@ -52,7 +52,7 @@ jobs:
           docker buildx build --push \
             --tag $IMAGE_ID:$VERSION  \
             --file Dockerfile.arm \
-            --platform linux/arm64 .
+            --platform linux/arm64 .  
 
     - name: Configure Docker Client
       run: |-
