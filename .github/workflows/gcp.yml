@@ -23,12 +23,10 @@ jobs:
     - name: Build Docker Image
       run: docker buildx build --platform linux/amd64 -t carro-backend-api:latest .
 
-    - name: Configure Docker Client
-      run: |-
-        gcloud auth configure-docker --quiet
-        gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
-        gcloud auth print-access-token
-        docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+    # - name: Configure Docker Client
+    #   run: |-
+    #     gcloud auth configure-docker --quiet
+    #     gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
     # - name: Push Docker Image to Container Registry (GCR)
     #   run: |-
