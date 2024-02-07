@@ -20,39 +20,8 @@ jobs:
         project_id: ${{ env.PROJECT_ID }}
         export_default_credentials: true
 
-    # - name: Build Docker Image
-    #   run: docker buildx build --platform linux/amd64 -t carro-backend-api:latest .
-
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
-        
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v1
-      
-    - name: Prepare multiarch docker
-      run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      
-    - name: Builder create
-      run: docker buildx create --use      
-
-    - name: Build image
-      run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          VERSION=$(cat version)
-          
-          echo TAG=$IMAGE_ID:$VERSION
-
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-          docker buildx build --push \
-            --tag $IMAGE_ID:$VERSION  \
-            --file Dockerfile.arm \
-            --platform linux/arm64 .  
+    - name: Build Docker Image
+      run: docker build -t carro-backend-api:latest .
 
     - name: Configure Docker Client
       run: |-
