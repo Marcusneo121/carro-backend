@@ -93,7 +93,6 @@ export default class AuthController {
         }
     }
 
-
     //public async register({ auth, response, request }) {
     public async register({ response, request }) {
         try {
@@ -122,59 +121,68 @@ export default class AuthController {
             // const hashedPassword = await Argon2.hash(payloadData.password)
             // payloadData.password = hashedPassword;
 
-            const userData = {
-                "role_id": payloadData.isAdmin === true ? 1 : 0,
-                "username": payloadData.username,
-                "email": payloadData.email,
-                "password": payloadData.password,
-            }
+            const userFindEmail = await User.findBy("email", payloadData.email)
 
-            const user = await User.create(userData);
-            const profileData = {
-                "user_id": user.id,
-                "first_name": payloadData.first_name,
-                "last_name": payloadData.last_name,
-                "address1": payloadData.address1,
-                "address2": payloadData.address2,
-                "address3": payloadData.address3,
-                "poscode": payloadData.poscode,
-                "city": payloadData.city,
-                "state": payloadData.state,
-                "age": payloadData.age,
-                "phone_number": payloadData.phone_number,
-                "date_of_birth": payloadData.date_of_birth,
-                "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
-            }
-            const profile = await Profile.create(profileData);
-
-            emailTransporter.use('compile', hbs(handlebarOptions));
-
-            const email = {
-                from: {
-                    name: "Carro Car Sharing",
-                    address: Env.get('EMAIL_USER')
-                },
-                to: user.email,
-                subject: "Carro Email Address Verification",
-                template: 'email_verification',
-                context: {
-                    email: user.email,
-                }
-            };
-
-            await emailTransporter.sendMail(email).then(() => {
-                return response.status(200).json({
-                    "data": {
-                        user,
-                        profile
-                    },
-                    "email-verification": "Email verification sent",
-                    "status": "ok",
-                    "message": "Account registered succesfully"
+            if (userFindEmail) {
+                return response.status(400).json({
+                    "status": "error",
+                    "message": "Email already registered. Please login with this email.",
                 })
-            }).catch(error => {
-                console.error(error);
-            });
+            } else {
+                const userData = {
+                    "role_id": payloadData.isAdmin === true ? 1 : 0,
+                    "username": payloadData.username,
+                    "email": payloadData.email,
+                    "password": payloadData.password,
+                }
+
+                const user = await User.create(userData);
+                const profileData = {
+                    "user_id": user.id,
+                    "first_name": payloadData.first_name,
+                    "last_name": payloadData.last_name,
+                    "address1": payloadData.address1,
+                    "address2": payloadData.address2,
+                    "address3": payloadData.address3,
+                    "poscode": payloadData.poscode,
+                    "city": payloadData.city,
+                    "state": payloadData.state,
+                    "age": payloadData.age,
+                    "phone_number": payloadData.phone_number,
+                    "date_of_birth": payloadData.date_of_birth,
+                    "profile_image": payloadData.profile_image === null ? null : payloadData.profile_image
+                }
+                const profile = await Profile.create(profileData);
+
+                emailTransporter.use('compile', hbs(handlebarOptions));
+
+                const email = {
+                    from: {
+                        name: "Carro Car Sharing",
+                        address: Env.get('EMAIL_USER')
+                    },
+                    to: user.email,
+                    subject: "Carro Email Address Verification",
+                    template: 'email_verification',
+                    context: {
+                        email: user.email,
+                    }
+                };
+
+                await emailTransporter.sendMail(email).then(() => {
+                    return response.status(200).json({
+                        "data": {
+                            user,
+                            profile
+                        },
+                        "email-verification": "Email verification sent",
+                        "status": "ok",
+                        "message": "Account registered succesfully"
+                    })
+                }).catch(error => {
+                    console.error(error);
+                });
+            }
         } catch (error) {
             return response.status(404).json({
                 "status": "error",

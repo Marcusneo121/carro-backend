@@ -74,7 +74,6 @@ export default hashConfig({
       parallelism: 1,
       saltSize: 16,
     },
-
     /*
     |--------------------------------------------------------------------------
     | Bcrypt
