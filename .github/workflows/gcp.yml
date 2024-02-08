@@ -23,23 +23,27 @@ jobs:
     - name: Build Docker Image
       run: docker buildx build --platform linux/amd64 -t carro-backend-api .
 
+    - name: Automatic Tagging of Releases
+      id: increment-git-tag
+      run: |
+        bash ./scripts/git_update.sh -v major  
+
     - name: Configure Docker Client
       run: |-
         gcloud auth configure-docker --quiet
         gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
+    - name: Push Docker Image to Artifact Registry
+      env:
+        GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+      run: |-
+        docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
+        docker push us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
 
     # - name: Push Docker Image to Container Registry (GCR)
     #   run: |-
     #     docker tag carro-backend-api:latest gcr.io/$PROJECT_ID/carro-backend-api:latest
     #     docker push gcr.io/$PROJECT_ID/carro-backend-api:latest
-
-    - name: Push Docker Image to Artifact Registry
-      run: |-
-        docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api
-        docker push us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api
-
-        
 
     # - name: Push Docker Image to Container Registry (GCR)
     #   env:
