@@ -48,7 +48,7 @@ jobs:
         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
       with:
         image: us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
-          service: carro-app-backend
+        service: carro-app-backend
           # region: us-central1
           # platform: managed
           # allow-unauthenticated: true
