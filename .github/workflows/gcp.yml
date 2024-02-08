@@ -46,7 +46,7 @@ jobs:
       uses: google-github-actions/deploy-cloudrun@main
       with:
         image: us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
-        service: carro-app-backend
+        service: carro-backend-api
         region: us-central1
           # platform: managed
           # allow-unauthenticated: true
