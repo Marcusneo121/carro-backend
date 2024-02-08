@@ -47,9 +47,9 @@ jobs:
       env:
         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
       with:
-        image: gcr.io/us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
-          # service: <your-service-name>
-          # region: <your-region>
+        image: gcr.io/carro-app-backend/carro-backend-api:$GIT_TAG
+          service: pro-bliss-413511
+          region: us-central1
           # platform: managed
           # allow-unauthenticated: true
           # env_vars: |
