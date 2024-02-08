@@ -1,3 +1,5 @@
+ # starts here
+
 ---
 name: Build and Push Docker Image to Google Cloud Platform
 on: 
@@ -40,6 +42,21 @@ jobs:
         docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
         docker push us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
 
+    - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@main
+        env:
+        GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        with:
+          image: gcr.io/us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:$GIT_TAG
+          # service: <your-service-name>
+          # region: <your-region>
+          # platform: managed
+          # allow-unauthenticated: true
+          # env_vars: |
+          #     FOO=bar
+          #     ZIP=zap
+
+    # end here
     # - name: Push Docker Image to Container Registry (GCR)
     #   run: |-
     #     docker tag carro-backend-api:latest gcr.io/$PROJECT_ID/carro-backend-api:latest
