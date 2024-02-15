@@ -54,7 +54,7 @@ jobs:
       env:
         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
       run: |-
-        docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
+        docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api
         docker push us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
 
     - name: Deploy to Cloud Run
