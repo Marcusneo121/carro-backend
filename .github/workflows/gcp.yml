@@ -12,7 +12,6 @@ jobs:
     env:
       IMAGE_NAME: carro-app-backend
       PROJECT_ID: pro-bliss-413511
-      HOST: ${{ secrets.HOST }}
 
     steps:
     - name: Checkout
@@ -25,7 +24,10 @@ jobs:
         export_default_credentials: true
 
     - name: Build Docker Image
-      run: docker buildx build --platform linux/amd64 -t carro-backend-api .
+      run: docker buildx build \
+           --platform linux/amd64 \
+           --build-arg HOST=${{ secrets.HOST }} \
+           -t carro-backend-api .
 
     - name: Automatic Tagging of Releases
       id: increment-git-tag
