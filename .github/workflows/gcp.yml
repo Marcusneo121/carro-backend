@@ -24,6 +24,9 @@ jobs:
 
     - name: Build Docker Image
       run: docker buildx build --platform linux/amd64 -t carro-backend-api .
+
+    - name: Write github secrets
+      run: echo "My Host secret ${{ secrets.HOST }}"
     # - name: Checkout
     #   uses: actions/checkout@v4
     # - name: Set up QEMU
@@ -35,7 +38,7 @@ jobs:
     #   with:
     #     context: .
     #     platforms: linux/amd64
-    #     tags: carro-backend-api:latest
+    #     tags: carro-backend-api
     #     secrets: |
     #         "HOST=${{ secrets.HOST }}"    
 
