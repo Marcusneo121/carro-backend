@@ -12,6 +12,10 @@ jobs:
     env:
       IMAGE_NAME: carro-app-backend
       PROJECT_ID: pro-bliss-413511
+      secrets: |
+        "APP_KEY=${{ secrets.APP_KEY }}"
+        "HOST=${{ secrets.HOST }}"
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
