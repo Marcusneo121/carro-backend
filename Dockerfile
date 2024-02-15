@@ -3,6 +3,7 @@ FROM node:21.6.0
 WORKDIR /carro-app-backend
 # COPY . /carro-app-backend
 COPY package*.json ./
+COPY *.env ./
 RUN npm install
 COPY . .
 
