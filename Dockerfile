@@ -1,6 +1,4 @@
 FROM node:21.6.0
-RUN --mount=type=secret,id=github_token \
-  cat /run/secrets/github_token
 
 WORKDIR /carro-app-backend
 # COPY . /carro-app-backend
