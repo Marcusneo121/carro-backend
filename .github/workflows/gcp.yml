@@ -35,7 +35,7 @@ jobs:
       with:
         context: .
         platforms: linux/amd64
-        tags: carro-backend-api
+        tags: carro-backend-api:latest
         secrets: |
             "HOST=${{ secrets.HOST }}"    
 
