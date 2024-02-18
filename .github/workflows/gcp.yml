@@ -23,26 +23,8 @@ jobs:
         export_default_credentials: true
 
     - name: Build Docker Image
-      run: docker buildx build --platform linux/amd64 
-           --build-arg PORT='${{ secrets.PORT }}' 
-           --build-arg HOST='${{ secrets.HOST }}' 
-           --build-arg NODE_ENV='${{ secrets.NODE_ENV }}' 
-           --build-arg APP_KEY='${{ secrets.APP_KEY }}' 
-           --build-arg DRIVE_DISK='${{ secrets.DRIVE_DISK }}' 
-           --build-arg DB_CONNECTION='${{ secrets.DB_CONNECTION }}' 
-           --build-arg PG_HOST='${{ secrets.PG_HOST }}' 
-           --build-arg PG_PORT='${{ secrets.PG_PORT }}' 
-           --build-arg PG_USER='${{ secrets.PG_USER }}' 
-           --build-arg PG_PASSWORD='${{ secrets.PG_PASSWORD }}' 
-           --build-arg PG_DB_NAME='${{ secrets.PG_DB_NAME }}' 
-           --build-arg SECRET_TOKEN='${{ secrets.SECRET_TOKEN }}' 
-           --build-arg EMAIL_USER='${{ secrets.EMAIL_USER }}' 
-           --build-arg EMAIL_PASSWORD='${{ secrets.EMAIL_PASSWORD }}'
-           -t carro-backend-api .  
-          #  --build-arg CACHE_VIEWS='${{ secrets.CACHE_VIEWS }}' 
+      run: docker buildx build --platform linux/amd64 --build-arg PORT='${{ secrets.PORT }}' --build-arg HOST='${{ secrets.HOST }}' --build-arg NODE_ENV='${{ secrets.NODE_ENV }}' --build-arg APP_KEY='${{ secrets.APP_KEY }}' --build-arg DRIVE_DISK='${{ secrets.DRIVE_DISK }}' --build-arg DB_CONNECTION='${{ secrets.DB_CONNECTION }}' --build-arg PG_HOST='${{ secrets.PG_HOST }}' --build-arg PG_PORT='${{ secrets.PG_PORT }}' --build-arg PG_USER='${{ secrets.PG_USER }}' --build-arg PG_PASSWORD='${{ secrets.PG_PASSWORD }}' --build-arg PG_DB_NAME='${{ secrets.PG_DB_NAME }}' --build-arg SECRET_TOKEN='${{ secrets.SECRET_TOKEN }}' --build-arg EMAIL_USER='${{ secrets.EMAIL_USER }}' --build-arg EMAIL_PASSWORD='${{ secrets.EMAIL_PASSWORD }}' --build-arg CACHE_VIEWS='${{ secrets.CACHE_VIEWS }}' -t carro-backend-api .  
                 
-           
-
     - name: Print ID
       run: echo "ID is ${{ env.EMAIL_USER }}"
 
