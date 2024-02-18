@@ -40,11 +40,41 @@ jobs:
     - name: Build
       uses: docker/build-push-action@v5
       with:
-        # context: .
+        context: .
         platforms: linux/amd64
         tags: carro-backend-api
-        # secrets: |
-        #     "HOST=${{ secrets.HOST }}"    
+        secrets: |
+          "PORT=${{ secrets.PORT }}"
+          "HOST=${{ secrets.HOST }}"
+          "NODE_ENV=${{ secrets.NODE_ENV }}"
+          "APP_KEY=${{ secrets.APP_KEY }}"
+          "DRIVE_DISK=${{ secrets.DRIVE_DISK }}"
+          "DB_CONNECTION=${{ secrets.DB_CONNECTION }}"
+          "PG_HOST=${{ secrets.PG_HOST }}"
+          "PG_PORT=${{ secrets.PG_PORT }}"
+          "PG_USER=${{ secrets.PG_USER }}"
+          "PG_PASSWORD=${{ secrets.PG_PASSWORD }}"
+          "PG_DB_NAME=${{ secrets.PG_DB_NAME }}"
+          "SECRET_TOKEN=${{ secrets.SECRET_TOKEN }}"
+          "EMAIL_USER=${{ secrets.EMAIL_USER }}"
+          "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}"
+          "CACHE_VIEWS=${{ secrets.CACHE_VIEWS }}"
+
+# ENV PORT=3333
+# ENV HOST=0.0.0.0
+# ENV NODE_ENV=development
+# ENV APP_KEY=m2_pOXrFu1gvYuuy8rxjqaSr1v9_nIQ_
+# ENV DRIVE_DISK=local
+# ENV DB_CONNECTION=pg
+# ENV PG_HOST=ec2-100-24-250-155.compute-1.amazonaws.com
+# ENV PG_PORT=5432
+# ENV PG_USER=ejjfnmyurpjhea
+# ENV PG_PASSWORD=22329404f78ce1b8dadb8e622fb908cb3fb294a9fc31473448637a286b3bd41c
+# ENV PG_DB_NAME=db77bf6ecdfqnd
+# ENV SECRET_TOKEN=9Zz4tw0Ionm1XPZUfN0NOml3z5FMfmpgXwovD9hp8ryDIuGRM2EPHAB4iHsc0fb
+# ENV EMAIL_USER=carrocarsharing@gmail.com
+# ENV EMAIL_PASSWORD="oxva oyeg lkny drch"
+# ENV CACHE_VIEWS=false             
 
     - name: Automatic Tagging of Releases
       id: increment-git-tag
