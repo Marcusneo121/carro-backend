@@ -51,7 +51,7 @@ ARG CACHE_VIEWS
 
 WORKDIR /carro-app-backend
 # COPY . /carro-app-backend
-COPY build ./
+COPY . /build 
 COPY package*.json ./
 RUN npm install
 COPY . .
