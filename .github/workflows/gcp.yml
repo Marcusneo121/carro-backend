@@ -37,9 +37,10 @@ jobs:
            --build-arg PG_DB_NAME='${{ secrets.PG_DB_NAME }}' 
            --build-arg SECRET_TOKEN='${{ secrets.SECRET_TOKEN }}' 
            --build-arg EMAIL_USER='${{ secrets.EMAIL_USER }}' 
-           --build-arg EMAIL_PASSWORD='${{ secrets.EMAIL_PASSWORD }}' 
+           --build-arg EMAIL_PASSWORD='${{ secrets.EMAIL_PASSWORD }}'
+           -t carro-backend-api .  
           #  --build-arg CACHE_VIEWS='${{ secrets.CACHE_VIEWS }}' 
-           -t carro-backend-api .       
+                
            
 
     - name: Print ID
