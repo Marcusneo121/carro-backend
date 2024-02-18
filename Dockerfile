@@ -31,7 +31,7 @@ RUN --mount=type=secret,id=PORT \
     export EMAIL_PASSWORD=$(cat /run/secrets/EMAIL_PASSWORD) && \
     export CACHE_VIEWS=$(cat /run/secrets/CACHE_VIEWS)
 
-RUN bash -c 'echo -e $(cat /run/secrets/HOST)'
+RUN echo 'This is the $DB_CONNECTION'
 
 
 WORKDIR /carro-app-backend
