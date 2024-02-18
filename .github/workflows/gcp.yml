@@ -41,7 +41,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: path/to/Dockerfile
+        file: Dockerfile
         platforms: linux/amd64
         tags: carro-backend-api
         secrets: |
