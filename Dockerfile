@@ -91,6 +91,7 @@ ENV CACHE_VIEWS=${CACHE_VIEWS}
 # ENV CACHE_VIEWS=false
 
 # RUN npm run migration
-RUN ['ENV_SILENT=true', "node", "./build/ace", "migration:run", "--force"]
+RUN ENV_SILENT=true node ./build/ace migration:run --force
+# RUN ['ENV_SILENT=true', "node", "./build/ace", "migration:run", "--force"]
 RUN npm run build
 CMD [ "npm", "run", "start" ]
