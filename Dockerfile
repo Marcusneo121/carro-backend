@@ -33,7 +33,7 @@ RUN --mount=type=secret,id=PORT \
     export EMAIL_PASSWORD=$(cat /run/secrets/EMAIL_PASSWORD) && \
     export CACHE_VIEWS=$(cat /run/secrets/CACHE_VIEWS)
 
-RUN echo 'This is the $HOST'
+RUN echo $HOST
 
 WORKDIR /carro-app-backend
 # COPY . /carro-app-backend
