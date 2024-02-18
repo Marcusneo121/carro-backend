@@ -24,7 +24,7 @@ jobs:
 
     - name: Build Docker Image
       run: docker buildx build --platform linux/amd64 
-           --build-arg HOST='${{ secrets.HOST }}''
+           --build-arg HOST='${{ secrets.HOST }}'
            -t carro-backend-api .
 
     - name: Print ID
