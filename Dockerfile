@@ -1,5 +1,7 @@
 FROM node:21.6.0
 
+ARG HOST
+
 RUN --mount=type=secret,id=PORT \
     --mount=type=secret,id=HOST \
     --mount=type=secret,id=NODE_ENV \
@@ -31,8 +33,7 @@ RUN --mount=type=secret,id=PORT \
     export EMAIL_PASSWORD=$(cat /run/secrets/EMAIL_PASSWORD) && \
     export CACHE_VIEWS=$(cat /run/secrets/CACHE_VIEWS)
 
-RUN echo 'This is the $DB_CONNECTION'
-
+RUN echo 'This is the $HOST'
 
 WORKDIR /carro-app-backend
 # COPY . /carro-app-backend
