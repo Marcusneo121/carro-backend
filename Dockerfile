@@ -88,7 +88,7 @@ ENV EMAIL_PASSWORD=${EMAIL_PASSWORD}
 # ENV SECRET_TOKEN=9Zz4tw0Ionm1XPZUfN0NOml3z5FMfmpgXwovD9hp8ryDIuGRM2EPHAB4iHsc0fb
 # ENV EMAIL_USER=carrocarsharing@gmail.com
 # ENV EMAIL_PASSWORD="oxva oyeg lkny drch"
-# ENV CACHE_VIEWS=false
+ENV CACHE_VIEWS=false
 
 RUN npm run migration
 RUN npm run build
