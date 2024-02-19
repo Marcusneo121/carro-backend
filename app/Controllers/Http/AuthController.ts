@@ -6,6 +6,7 @@ import Argon2 from "phc-argon2";
 import Env from '@ioc:Adonis/Core/Env'
 import path from 'path';
 import nodemailer from "nodemailer"
+import Redis from '@ioc:Adonis/Addons/Redis'
 // import hbs from 'nodemailer-express-handlebars'
 const hbs = require('nodemailer-express-handlebars');
 
@@ -169,6 +170,8 @@ export default class AuthController {
                     }
                 };
 
+                await Redis.sadd('usernames', user.username);
+
                 await emailTransporter.sendMail(email).then(() => {
                     return response.status(200).json({
                         "data": {
@@ -207,19 +210,32 @@ export default class AuthController {
         const payload = await request.validate({ schema: usernameSchema })
         const username = payload.username
 
-        const user = await User.findBy("username", username)
+        const redisCheck = await Redis.sismember('usernames', username)
 
-        if (user) {
-            return response.status(200).json({
-                "status": "error",
-                "message": "Username already taken. Please try other username.",
-            })
-        } else {
+        if (redisCheck === 0) {
             return response.status(200).json({
                 "status": "ok",
                 "message": "Username not registered yet. Able to register.",
             })
+        } else {
+            return response.status(200).json({
+                "status": "error",
+                "message": "Username already taken. Please try other username.",
+            })
         }
+
+        // const user = await User.findBy("username", username)
+        // if (user) {
+        //     return response.status(200).json({
+        //         "status": "error",
+        //         "message": "Username already taken. Please try other username.",
+        //     })
+        // } else {
+        //     return response.status(200).json({
+        //         "status": "ok",
+        //         "message": "Username not registered yet. Able to register.",
+        //     })
+        // }
     }
 
     public async checkEmail({ response, request }) {

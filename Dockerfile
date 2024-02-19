@@ -88,6 +88,11 @@ ENV SECRET_TOKEN=9Zz4tw0Ionm1XPZUfN0NOml3z5FMfmpgXwovD9hp8ryDIuGRM2EPHAB4iHsc0fb
 ENV EMAIL_USER=carrocarsharing@gmail.com
 ENV EMAIL_PASSWORD="oxva oyeg lkny drch"
 ENV CACHE_VIEWS=false
+ENV REDIS_CONNECTION=local
+ENV REDIS_HOST=redis-15345.c238.us-central1-2.gce.cloud.redislabs.com
+ENV REDIS_PORT=15345
+ENV REDIS_USERNAME=default
+ENV REDIS_PASSWORD=tkxu0k3kEfmZqJZlby50DueEi8Z9JO3F
 
 RUN npm run migration
 RUN npm run build
