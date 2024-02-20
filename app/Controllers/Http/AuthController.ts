@@ -48,17 +48,14 @@ export default class AuthController {
 
 
         if (!user) {
-            console.log('come in 0')
             return response.status(404).json({
                 "status": "error",
                 "message": "User not found",
             })
         } else {
-            console.log(user);
             const profile = await Profile.findBy('user_id', user?.id)
 
             if (!profile) {
-                console.log('come in 1')
                 return response.status(404).json({
                     "status": "error",
                     "message": "User not found",
