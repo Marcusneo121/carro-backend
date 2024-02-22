@@ -4,10 +4,10 @@ import Car from 'App/Models/Car'
 //import Role from 'App/Models/Role'
 import User from 'App/Models/User'
 import { Storage } from '@google-cloud/storage'
-import Application from '@ioc:Adonis/Core/Application'
+// import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
-import fs from 'fs/promises';
-import path from 'path';
+// import fs from 'fs/promises';
+// import path from 'path';
 
 const storage = new Storage({
     projectId: Env.get('GCP_STORAGE_BUCKET'),
