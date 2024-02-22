@@ -93,6 +93,8 @@ ENV REDIS_HOST=redis-15345.c238.us-central1-2.gce.cloud.redislabs.com
 ENV REDIS_PORT=15345
 ENV REDIS_USERNAME=default
 ENV REDIS_PASSWORD=tkxu0k3kEfmZqJZlby50DueEi8Z9JO3F
+ENV GCP_STORAGE_BUCKET=gs://carro-backend-storage
+ENV PROJECT_ID=pro-bliss-413511
 
 RUN npm run migration
 RUN npm run build
