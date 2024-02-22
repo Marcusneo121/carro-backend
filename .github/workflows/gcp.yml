@@ -115,9 +115,6 @@ jobs:
           #     FOO=bar
           #     ZIP=zap
 
-    - name: 'Deployed Cloud Run Instance URL'
-      run: 'curl "${{ steps.deploy.outputs.url }}"'
-
     # end here
 
 
