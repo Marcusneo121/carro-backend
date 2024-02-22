@@ -4,9 +4,13 @@ import User from "App/Models/User";
 import Argon2 from "phc-argon2";
 
 import Env from '@ioc:Adonis/Core/Env'
+import fs from 'fs/promises';
 import path from 'path';
 import nodemailer from "nodemailer"
 import Redis from '@ioc:Adonis/Addons/Redis'
+import { Storage } from '@google-cloud/storage'
+import Application from '@ioc:Adonis/Core/Application'
+
 // import hbs from 'nodemailer-express-handlebars'
 const hbs = require('nodemailer-express-handlebars');
 
@@ -31,7 +35,77 @@ const handlebarOptions = {
     viewPath: path.resolve('./resources/views'),
     extName: ".handlebars",
 }
+
+const storage = new Storage({
+    projectId: "pro-bliss-413511",
+    keyFilename: "carro-backend-storage.json",
+});
+const bucket = storage.bucket(Env.get('GCP_STORAGE_BUCKET'));
+
+const uploadToFirebaseStorage = async (filepath, fileName: String, username: String) => {
+    try {
+        const storagepath = `${username}/${fileName}`;
+        console.log(filepath)
+        const result = await bucket.upload(filepath, {
+            destination: storagepath,
+            public: true,
+        });
+        console.log(result);
+        return result
+    } catch (error) {
+        console.log(error);
+        throw new Error(error.message);
+    }
+}
+
+const imageProcesses = async (image: any, payload: any, carSide: String) => {
+    await image.move(Application.tmpPath('uploads'))
+    const imageName = `${payload.username.toString()}` + "_" + `${payload.car_brand.toString()}` + "_" + `${payload.model.toString()}` + "_"
+        + new Date().getUTCMonth().toString() + new Date().getDate().toString() + new Date().getFullYear().toString() + "_" + new Date().getTime().toString()
+        + "_rearview" + `.${payload.image1.extname}`
+
+    return imageName;
+}
+
 export default class AuthController {
+    public async uploadImage({ request, response }) {
+
+        const uploadSchema = schema.create({
+            username: schema.string(),
+            car_brand: schema.string(),
+            model: schema.string(),
+            image1: schema.file({
+                size: '10mb',
+                extnames: ['jpg', 'gif', 'png'],
+            })
+        })
+
+        const payload = await request.validate({
+            schema: uploadSchema, messages: {
+                "car_brand.required": "Car Brand is required",
+                "model.required": "Car Model is required",
+                "username.required": "Username is required",
+                "image1.required": "Image1 is required"
+            },
+        })
+
+        if (payload) {
+            await payload.image1.move(Application.tmpPath('uploads'))
+            const imageName = `${payload.username.toString()}` + "_" + `${payload.car_brand.toString()}` + "_" + `${payload.model.toString()}` + "_"
+                + new Date().getUTCMonth().toString() + new Date().getDate().toString() + new Date().getFullYear().toString() + "_" + new Date().getTime().toString()
+                + "_rearview" + `.${payload.image1.extname}`
+            let result = await uploadToFirebaseStorage(`tmp/uploads/${payload.image1.data.clientName}`, imageName, payload.username.toString());
+
+            if (result != null) {
+                console.log(result);
+                for (const file of await fs.readdir('tmp/uploads')) {
+                    await fs.unlink(path.join("tmp/uploads", file));
+                }
+            }
+        }
+    }
+
+
     public async login({ auth, response, request }) {
 
         const newAuthSchema = schema.create({

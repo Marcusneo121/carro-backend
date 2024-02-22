@@ -7,3 +7,4 @@ coverage
 tmp
 cert
 build/.env
+carro-backend-storage.json

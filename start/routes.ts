@@ -32,6 +32,7 @@ Route.post('/register', 'AuthController.register')
 Route.post('/register/sendEmail/:email', 'AuthController.sendEmail')
 Route.post('/register/checkUsername', 'AuthController.checkUsername')
 Route.post('/register/checkEmail', 'AuthController.checkEmail')
+Route.post('/upload/image', 'AuthController.uploadImage')
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/car', 'CarsController.getCars')
