@@ -146,10 +146,6 @@ export default class CarsController {
             })
 
         } catch (error) {
-            //remove all temp image in uploads folder
-            for (const file of await fs.readdir('tmp/uploads')) {
-                await fs.unlink(path.join("tmp/uploads", file));
-            }
             return response.status(404).json({
                 "status": "error",
                 "message": "Something went wrong. Please try again.",
