@@ -58,17 +58,17 @@ const uploadToFirebaseStorage = async (filepath, fileName: String, username: Str
     }
 }
 
-const imageProcesses = async (image: any, payload: any, carSide: String) => {
-    await image.move(Application.tmpPath('uploads'))
-    const imageName = `${payload.username.toString()}` + "_" + `${payload.car_brand.toString()}` + "_" + `${payload.model.toString()}` + "_"
-        + new Date().getUTCMonth().toString() + new Date().getDate().toString() + new Date().getFullYear().toString() + "_" + new Date().getTime().toString()
-        + "_rearview" + `.${payload.image1.extname}`
+// const imageProcesses = async (image: any, payload: any, carSide: String) => {
+//     await image.move(Application.tmpPath('uploads'))
+//     const imageName = `${payload.username.toString()}` + "_" + `${payload.car_brand.toString()}` + "_" + `${payload.model.toString()}` + "_"
+//         + new Date().getUTCMonth().toString() + new Date().getDate().toString() + new Date().getFullYear().toString() + "_" + new Date().getTime().toString()
+//         + "_rearview" + `.${payload.image1.extname}`
 
-    return imageName;
-}
+//     return imageName;
+// }
 
 export default class AuthController {
-    public async uploadImage({ request, response }) {
+    public async uploadImage({ request}) {
 
         const uploadSchema = schema.create({
             username: schema.string(),
