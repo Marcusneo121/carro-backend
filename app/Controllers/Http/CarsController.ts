@@ -17,8 +17,8 @@ const bucket = storage.bucket(Env.get('GCP_STORAGE_BUCKET'));
 
 const carImageUploader = async (image: any, payload: any, carSide: String, username: String) => {
     try {
-        //1. Move image to temp file
-        await image.move(Application.tmpPath('uploads'))
+        //1. Move image to temp file - Only work with Deployment that have File System, Clour Run dont have
+        // await image.move(Application.tmpPath('uploads'))
         //2. Create image name
         const imageName = `${username.toString()}` + "_" + `${payload.car_name.toString()}` + "_" + `${payload.year_made.toString()}` + "_" + `${payload.color.toString()}` + "_"
             + new Date().getUTCMonth().toString() + new Date().getDate().toString() + new Date().getFullYear().toString() + "_" + new Date().getTime().toString()
@@ -26,8 +26,8 @@ const carImageUploader = async (image: any, payload: any, carSide: String, usern
         //3. Google Cloud Storage (GCS) Path
         const storagepath = `${username.toString()}/${imageName.toString()}`;
         //4. Upload Image to GCS
-        const result = await bucket.upload(`/tmp/uploads/${image.data.clientName}`, {
-            // const result = await bucket.upload(image.data.clientName, {
+        // const result = await bucket.upload(`/tmp/uploads/${image.data.clientName}`, {
+        const result = await bucket.upload(image.tmpPath, {
             destination: storagepath,
             public: true,
         });
@@ -134,10 +134,10 @@ export default class CarsController {
                     "message": "Something went wrong adding car. Please try again.",
                 })
             }
-            //remove all temp image in uploads folder
-            for (const file of await fs.readdir('tmp/uploads')) {
-                await fs.unlink(path.join("tmp/uploads", file));
-            }
+            // //remove all temp image in uploads folder
+            // for (const file of await fs.readdir('tmp/uploads')) {
+            //     await fs.unlink(path.join("tmp/uploads", file));
+            // }
 
             return response.status(201).json({
                 data: {
