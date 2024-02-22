@@ -26,7 +26,8 @@ const carImageUploader = async (image: any, payload: any, carSide: String, usern
         //3. Google Cloud Storage (GCS) Path
         const storagepath = `${username.toString()}/${imageName.toString()}`;
         //4. Upload Image to GCS
-        const result = await bucket.upload(`tmp/uploads/${image.data.clientName}`, {
+        const result = await bucket.upload(`/tmp/uploads/${image.data.clientName}`, {
+            // const result = await bucket.upload(image.data.clientName, {
             destination: storagepath,
             public: true,
         });
