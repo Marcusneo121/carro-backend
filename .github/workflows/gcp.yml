@@ -88,17 +88,32 @@ jobs:
         docker tag carro-backend-api us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
         docker push us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
 
+
+    - name: Retrieve key file content
+      run: |
+          # Retrieve the content of the secret from Secret Manager
+          KEY_FILE_CONTENT=$(gcloud secrets versions access latest --secret=key-file)
+
+          # Set the secret in GitHub
+          echo "$KEY_FILE_CONTENT" | tr -d '\n' > key-file.json
+          echo "::set-secret name=KEY_FILE_CONTENT::$(cat key-file.json)"  
+
     - name: Deploy to Cloud Run
       uses: google-github-actions/deploy-cloudrun@main
       with:
         image: us-central1-docker.pkg.dev/pro-bliss-413511/carro-app-backend/carro-backend-api:latest
         service: carro-backend-api
         region: us-central1
+        # service_account_key: ${{ secrets.KEY_FILE_CONTENT }}
+        env_vars: KEY_FILE_PATH=${{ steps.get-key-file-content.outputs.key_file_content }}
           # platform: managed
           # allow-unauthenticated: true
           # env_vars: |
           #     FOO=bar
           #     ZIP=zap
+
+    - name: 'Deployed Cloud Run Instance URL'
+      run: 'curl "${{ steps.deploy.outputs.url }}"'
 
     # end here
 

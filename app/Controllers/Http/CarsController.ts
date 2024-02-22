@@ -8,10 +8,23 @@ import { Storage } from '@google-cloud/storage'
 import Env from '@ioc:Adonis/Core/Env'
 // import fs from 'fs/promises';
 // import path from 'path';
+// import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+
+// const client = new SecretManagerServiceClient();
+// async function accessSecret() {
+//     const [version] = await client.accessSecretVersion({
+//         name: 'projects/625912681150/secrets/carro-backend-storage-secret/versions/1',
+//     });
+//     // version.payload.data.toString('utf8');
+//     const payload = version.payload?.data?.toString();
+//     console.log(`Secret data: ${payload}`);
+//     return payload
+// }
 
 const storage = new Storage({
     projectId: Env.get('GCP_STORAGE_BUCKET'),
-    keyFilename: "carro-backend-storage.json",
+    // keyFilename: "carro-backend-storage.json",
+    credentials: Env.get('KEY_FILE_PATH'),
 });
 const bucket = storage.bucket(Env.get('GCP_STORAGE_BUCKET'));
 
@@ -55,6 +68,7 @@ export default class CarsController {
 
     public async addCar({ auth, response, request }) {
         try {
+            // accessSecret();
             await auth.use('api').authenticate()
             const tokenUserData = auth.use('api').user
 
