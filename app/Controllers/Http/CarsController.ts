@@ -24,7 +24,7 @@ import Env from '@ioc:Adonis/Core/Env'
 const storage = new Storage({
     projectId: Env.get('GCP_STORAGE_BUCKET'),
     // keyFilename: "carro-backend-storage.json",
-    credentials: Env.get('KEY_FILE_PATH'),
+    // credentials: Env.get('KEY_FILE_PATH'),
 });
 const bucket = storage.bucket(Env.get('GCP_STORAGE_BUCKET'));
 
@@ -68,6 +68,7 @@ export default class CarsController {
 
     public async addCar({ auth, response, request }) {
         try {
+            console.log('accessing secret');
             // accessSecret();
             await auth.use('api').authenticate()
             const tokenUserData = auth.use('api').user
