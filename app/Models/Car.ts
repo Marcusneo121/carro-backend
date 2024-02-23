@@ -57,6 +57,9 @@ export default class Car extends BaseModel {
   @column()
   public availableToDate: DateTime
 
+  @column()
+  public is_electric: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

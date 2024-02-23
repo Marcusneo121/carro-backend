@@ -90,6 +90,7 @@ export default class CarsController {
                 price: schema.string(),
                 available_from_date: schema.string(),
                 available_to_date: schema.string(),
+                is_electric: schema.boolean(),
             })
 
             const payload = await request.validate({
@@ -125,6 +126,7 @@ export default class CarsController {
                 "price": payload.price,
                 "available_from_date": payload.available_from_date,
                 "available_to_date": payload.available_to_date,
+                "is_electric": payload.is_electric,
             }
 
             const car = await Car.create(carData)
