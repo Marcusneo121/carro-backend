@@ -48,7 +48,8 @@ export default class CarsController {
     public async getCars({ auth, response }) {
         await auth.use('api').authenticate()
         // const tokenUserData = auth.use('api').user
-        const car = await Database.from('cars').where('available_from_date', '>', DateTime.local().toSQLDate())
+        // const car = await Database.from('cars').where('available_from_date', '<', DateTime.local().toSQLDate()).andWhere('available_to_date', '>', DateTime.local().toSQLDate())
+        const car = await Database.from('cars').where('available_to_date', '>', DateTime.local().toSQLDate())
         // const car = await Car.all();
         return response.status(200).json({
             data: car,
