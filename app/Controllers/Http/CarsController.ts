@@ -6,6 +6,8 @@ import User from 'App/Models/User'
 import { Storage } from '@google-cloud/storage'
 // import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
+import Database from '@ioc:Adonis/Lucid/Database'
+import { DateTime } from 'luxon'
 // import fs from 'fs/promises';
 // import path from 'path';
 
@@ -46,8 +48,8 @@ export default class CarsController {
     public async getCars({ auth, response }) {
         await auth.use('api').authenticate()
         // const tokenUserData = auth.use('api').user
-
-        const car = await Car.all();
+        const car = await Database.from('cars').where('available_from_date', '>', DateTime.local().toSQLDate())
+        // const car = await Car.all();
         return response.status(200).json({
             data: car,
             message: "Car list retrieved successfully"
