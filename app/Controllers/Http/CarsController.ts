@@ -13,7 +13,7 @@ import { DateTime } from 'luxon'
 
 const storage = new Storage({
     projectId: Env.get('GCP_STORAGE_BUCKET'),
-    // keyFilename: "carro-backend-storage.json", 
+    // keyFilename: "carro-backend-storage.json",
     // keyFilename, this is required if you run locally, not required when you deploy Cloud run with service keys
 });
 const bucket = storage.bucket(Env.get('GCP_STORAGE_BUCKET'));
@@ -48,9 +48,11 @@ export default class CarsController {
     public async getCars({ auth, response }) {
         await auth.use('api').authenticate()
         // const tokenUserData = auth.use('api').user
-        // const car = await Database.from('cars').where('available_from_date', '<', DateTime.local().toSQLDate()).andWhere('available_to_date', '>', DateTime.local().toSQLDate())
-        const car = await Database.from('cars').where('available_to_date', '>', DateTime.local().toSQLDate())
         // const car = await Car.all();
+        // const car1 = await Database.rawQuery("select * from cars where available_from_date > NOW()");
+        // const car = await Database.from('cars').where('available_to_date', '>', DateTime.local().toSQLDate()).andWhere('available_from_date', '<', DateTime.local().toSQLDate()).orderBy("id", "asc")
+        const car = await Database.from('cars').where('available_to_date', '>', DateTime.local().toSQLDate()).orderBy("id", "asc")
+
         return response.status(200).json({
             data: car,
             message: "Car list retrieved successfully"

@@ -51,18 +51,37 @@ export default class Car extends BaseModel {
   @column()
   public price: string
 
-  @column()
+  @column.dateTime({
+    serialize: (value: DateTime | null) => {
+      return value ? value.setZone('utc').toISO() : value
+    },
+  })
   public availableFromDate: DateTime
 
-  @column()
+  @column.dateTime({
+    serialize: (value: DateTime | null) => {
+      return value ? value.setZone('utc').toISO() : value
+    },
+  })
   public availableToDate: DateTime
 
   @column()
   public is_electric: boolean
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    serialize: (value: DateTime | null) => {
+      return value ? value.setZone('utc').toISO() : value
+    },
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    serialize: (value: DateTime | null) => {
+      return value ? value.setZone('utc').toISO() : value
+    },
+  })
   public updatedAt: DateTime
 }
