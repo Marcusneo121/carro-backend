@@ -51,18 +51,20 @@ export default class Car extends BaseModel {
   @column()
   public price: string
 
-  @column.dateTime({
-    serialize: (value: DateTime | null) => {
-      return value ? value.setZone('utc').toISO() : value
-    },
-  })
+  // @column.dateTime({
+  //   serialize: (value: DateTime | null) => {
+  //     return value ? value.setZone('utc').toISO() : value
+  //   },
+  // })
+  @column()
   public availableFromDate: DateTime
 
-  @column.dateTime({
-    serialize: (value: DateTime | null) => {
-      return value ? value.setZone('utc').toISO() : value
-    },
-  })
+  // @column.dateTime({
+  //   serialize: (value: DateTime | null) => {
+  //     return value ? value.setZone('utc').toISO() : value
+  //   },
+  // })
+  @column()
   public availableToDate: DateTime
 
   @column()
@@ -70,18 +72,18 @@ export default class Car extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value: DateTime | null) => {
-      return value ? value.setZone('utc').toISO() : value
-    },
+    // serialize: (value: DateTime | null) => {
+    //   return value ? value.setZone('utc').toISO() : value
+    // },
   })
   public createdAt: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value: DateTime | null) => {
-      return value ? value.setZone('utc').toISO() : value
-    },
+    // serialize: (value: DateTime | null) => {
+    //   return value ? value.setZone('utc').toISO() : value
+    // },
   })
   public updatedAt: DateTime
 }

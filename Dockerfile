@@ -79,6 +79,7 @@ ENV NODE_ENV=development
 ENV APP_KEY=m2_pOXrFu1gvYuuy8rxjqaSr1v9_nIQ_
 ENV DRIVE_DISK=local
 ENV DB_CONNECTION=pg
+ENV TZ=UTC
 ENV PG_HOST=ec2-100-24-250-155.compute-1.amazonaws.com
 ENV PG_PORT=5432
 ENV PG_USER=ejjfnmyurpjhea
