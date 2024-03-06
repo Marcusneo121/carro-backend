@@ -29,10 +29,10 @@ function getNumberOfDaysBetweenDates(startDate: string, endDate: string): number
 
 export default class RentsController {
 
-    public async getBargains({ auth, response, request }) {
+    public async getBargains({ auth, response }) {
         try {
             await auth.use('api').authenticate()
-            const tokenUserData = auth.use('api').user
+            // const tokenUserData = auth.use('api').user
 
             const bargainsData = await Bargain.all()
 

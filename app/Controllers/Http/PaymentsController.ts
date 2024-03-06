@@ -251,7 +251,7 @@ export default class PaymentsController {
     public async confirmPaymentDone({ auth, response, request }) {
         try {
             await auth.use('api').authenticate()
-            const tokenUserData = auth.use('api').user
+            // const tokenUserData = auth.use('api').user
 
             const confrimPaymentSchema = schema.create({
                 payment_transaction_id: schema.number(),
