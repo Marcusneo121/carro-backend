@@ -27,6 +27,9 @@ export default class User extends BaseModel {
   @column()
   public roleId: number
 
+  @column()
+  public stripe_customer_id: number
+
   @belongsTo(() => Role)
   public role: BelongsTo<typeof Role>
 

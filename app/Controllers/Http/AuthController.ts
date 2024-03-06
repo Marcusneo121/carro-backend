@@ -10,6 +10,7 @@ import nodemailer from "nodemailer"
 import Redis from '@ioc:Adonis/Addons/Redis'
 import { Storage } from '@google-cloud/storage'
 import Application from '@ioc:Adonis/Core/Application'
+import Database from '@ioc:Adonis/Lucid/Database';
 
 // import hbs from 'nodemailer-express-handlebars'
 const hbs = require('nodemailer-express-handlebars');
@@ -68,7 +69,7 @@ const uploadToFirebaseStorage = async (filepath, fileName: String, username: Str
 // }
 
 export default class AuthController {
-    public async uploadImage({ request}) {
+    public async uploadImage({ request }) {
 
         const uploadSchema = schema.create({
             username: schema.string(),
@@ -391,6 +392,49 @@ export default class AuthController {
             }
         } catch (error) {
             return view.render('email_verify_error')
+        }
+    }
+
+    public async getUserData({ auth, response, params }) {
+        try {
+            await auth.use('api').authenticate()
+            const findUser = await Database.from('users')
+                .innerJoin('profiles', 'users.id', 'profiles.user_id').where('users.id', '=', params.id)
+                .orderBy('users.id', 'asc')
+
+            if (findUser.length !== 0) {
+                const userData = findUser[0]
+
+                const userDataFiltered = {
+                    "id": userData.id,
+                    "email": userData.email,
+                    "first_name": userData.first_name,
+                    "last_name": userData.last_name,
+                    "address1": userData.address1,
+                    "address2": userData.address2,
+                    "address3": userData.address3,
+                    "phone_number": userData.phone_number,
+                    "profile_image": userData.profile_image,
+                    "poscode": userData.poscode,
+                    "city": userData.city,
+                    "state": userData.state,
+                }
+
+                return response.status(200).json({
+                    data: userDataFiltered,
+                    message: "User found"
+                })
+            } else {
+                return response.status(404).json({
+                    "status": "error",
+                    "message": "User not found",
+                })
+            }
+        } catch (error) {
+            return response.status(404).json({
+                "status": "error",
+                "message": "Something went wrong. Please try again.",
+            })
         }
     }
 }
