@@ -172,7 +172,7 @@ export default class AuthController {
 
     //public async register({ auth, response, request }) {
     public async register({ response, request }) {
-        // try {
+        try {
             const userSchema = schema.create({
                 isAdmin: schema.boolean(),
                 username: schema.string(),
@@ -262,12 +262,12 @@ export default class AuthController {
                     console.error(error);
                 });
             }
-        // } catch (error) {
-        //     return response.status(404).json({
-        //         "status": "error",
-        //         "message": "Account register failed. Please try again."
-        //     })
-        // }
+        } catch (error) {
+            return response.status(404).json({
+                "status": "error",
+                "message": "Account register failed. Please try again."
+            })
+        }
     }
 
     public async logout({ auth, response }) {
