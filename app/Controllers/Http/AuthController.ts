@@ -423,6 +423,7 @@ export default class AuthController {
 
                 return response.status(200).json({
                     data: userDataFiltered,
+                    status: "ok",
                     message: "User found"
                 })
             } else {
