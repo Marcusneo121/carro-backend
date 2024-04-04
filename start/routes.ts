@@ -37,6 +37,7 @@ Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/user/:id', 'AuthController.getUserData')
   Route.get('/car', 'CarsController.getCars')
+  Route.get('/car/:id', 'CarsController.getCarsByID')
   Route.post('/car', 'CarsController.addCar')
   Route.patch('/car/:id', 'CarsController.updateCar')
   Route.get('/tester', 'TestersController.show')
