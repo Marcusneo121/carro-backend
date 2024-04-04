@@ -74,7 +74,7 @@ export default class CarsController {
     })
   }
 
-  public async getCarsByID({ auth, response, request, params }) {
+  public async getCarsByID({ auth, response, params }) {
     await auth.use('api').authenticate()
     // const tokenUserData = auth.use('api').user
 
