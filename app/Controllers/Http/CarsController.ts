@@ -70,6 +70,7 @@ export default class CarsController {
 
     return response.status(200).json({
       data: car,
+      status:"ok",
       message: 'Car list retrieved successfully',
     })
   }
