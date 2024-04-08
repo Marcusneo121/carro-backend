@@ -45,6 +45,7 @@ Route.group(() => {
   Route.post('/rent/booking', 'RentsController.bargain')
   Route.get('/rent/bargain', 'RentsController.getBargains')
   Route.get('/rent/bargain/user/:user_type', 'RentsController.getBargain')
+  Route.get('/rent/bargain/user/:user_type/:id', 'RentsController.getBargainByID')
   Route.patch('/rent/bargain/host/action', 'RentsController.hostBargainAcceptReject')
   Route.patch('/rent/bargain/guest/action', 'RentsController.guestBargainAcceptReject')
   Route.post('/rent/bargaining', 'RentsController.updateBargain')
