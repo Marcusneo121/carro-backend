@@ -87,6 +87,7 @@ export default class RentsController {
 
                 return response.status(200).json({
                     data: bargainDataByHost,
+                    status: "ok",
                     message: "Get bargain successfully"
                 })
             } else if (params.user_type === "guest") {
@@ -105,8 +106,9 @@ export default class RentsController {
                     .orderBy('bargains.id', 'asc');
 
                 return response.status(200).json({
-                    data: bargainDataByGuest,
-                    message: "Get bargain successfully"
+                  data: bargainDataByGuest,
+                  status: 'ok',
+                  message: 'Get bargain successfully',
                 })
             } else {
                 return response.status(404).json({
