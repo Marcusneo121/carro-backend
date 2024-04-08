@@ -183,6 +183,7 @@ export default class RentsController {
                     data: {
                         bargainAlready
                     },
+                    status: "ok",
                     message: "Booking successfully"
                 })
             }
