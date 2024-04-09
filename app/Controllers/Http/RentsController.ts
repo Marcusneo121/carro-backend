@@ -424,7 +424,7 @@ export default class RentsController {
       const findBargain = await Database.from('bargains')
         .innerJoin('cars', 'bargains.car_id', 'cars.id')
         .where('bargains.id', '=', payload.bargain_id)
-        .innerJoin('bargain_status', 'bargains.id', 'bargain_status.id')
+        .innerJoin('bargain_status', 'bargains.bargain_status_id', 'bargain_status.id')
         .orderBy('bargains.id', 'asc')
 
       if (findBargain.length !== 0) {
