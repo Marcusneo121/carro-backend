@@ -421,10 +421,19 @@ export default class RentsController {
         })
       }
 
+      const bargainsColumns = ['bargains.id as ori_bargain_id', 'bargains.*'] // Explicitly select all columns from bargains table and alias the id column
+      const carsColumns = ['cars.id as ori_car_id', 'cars.*']
+      const bargainStatusColumns = [
+        'bargain_status.id as ori_bargain_status_id',
+        'bargain_status.name as ori_bargain_name',
+        'bargain_status.*',
+      ]
+
       const findBargain = await Database.from('bargains')
+        .select(...bargainsColumns, ...carsColumns, ...bargainStatusColumns)
         .innerJoin('cars', 'bargains.car_id', 'cars.id')
-        .where('bargains.id', '=', payload.bargain_id)
         .innerJoin('bargain_status', 'bargains.bargain_status_id', 'bargain_status.id')
+        .where('bargains.id', '=', payload.bargain_id)
         .orderBy('bargains.id', 'asc')
 
       if (findBargain.length !== 0) {
@@ -453,7 +462,7 @@ export default class RentsController {
             const acceptedTransaction = {
               car_id: bargainData.car_id,
               renter_id: bargainData.renter_id,
-              bargain_id: bargainData.id,
+              bargain_id: bargainData.ori_bargain_id,
               host_id: bargainData.host_id,
               price_agreed: bargainData.last_bargain_amount,
             }
@@ -471,6 +480,7 @@ export default class RentsController {
               bargain_status_id: 4,
               transaction_id: rentalTransactions.transaction_id,
             }
+
             const updatedBargain = await Bargain.query()
               .where('id', payload.bargain_id)
               .update(toUpdateDataAccept)
@@ -478,8 +488,9 @@ export default class RentsController {
             return response.status(200).json({
               data: {
                 rentalTransactions,
-                updatedBargain,
+                // updatedBargain,
               },
+              status: 'success',
               message: 'Guest accepted host bargain.',
             })
           }
@@ -499,7 +510,7 @@ export default class RentsController {
             const toUpdateDataAccept = {
               bargain_status_id: 5,
             }
-            await Bargain.query().where('id', bargainData.id).update(toUpdateDataAccept)
+            await Bargain.query().where('id', bargainData.ori_bargain_id).update(toUpdateDataAccept)
 
             return response.status(200).json({
               status: 'success',
