@@ -481,9 +481,8 @@ export default class RentsController {
               transaction_id: rentalTransactions.transaction_id,
             }
 
-            const updatedBargain = await Bargain.query()
-              .where('id', payload.bargain_id)
-              .update(toUpdateDataAccept)
+            // const updatedBargain =
+            await Bargain.query().where('id', payload.bargain_id).update(toUpdateDataAccept)
 
             return response.status(200).json({
               data: {
