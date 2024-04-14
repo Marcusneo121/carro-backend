@@ -179,6 +179,7 @@ export default class PaymentsController {
                                         publishableKey: Env.get('STRIPE_PUBLIC'),
                                         payment_transaction_id: paymentTransaction['$original'].payment_transaction_id
                                     },
+                                    status: "ok",
                                     message: "Open Stripe payment sheet"
                                 })
 
@@ -227,14 +228,16 @@ export default class PaymentsController {
                                 })
                             } else {
                                 return response.status(200).json({
-                                    data: {
-                                        paymentIntent: paymentCreatedData.client_secret,
-                                        ephemeralKey: ephemeralKey.secret,
-                                        customer: customers.data[0].id, //this is get from search customer result
-                                        publishableKey: Env.get('STRIPE_PUBLIC'),
-                                        payment_transaction_id: paymentTransaction['$original'].payment_transaction_id
-                                    },
-                                    message: "Open Stripe payment sheet"
+                                  data: {
+                                    paymentIntent: paymentCreatedData.client_secret,
+                                    ephemeralKey: ephemeralKey.secret,
+                                    customer: customers.data[0].id, //this is get from search customer result
+                                    publishableKey: Env.get('STRIPE_PUBLIC'),
+                                    payment_transaction_id:
+                                      paymentTransaction['$original'].payment_transaction_id,
+                                  },
+                                  status: 'ok',
+                                  message: 'Open Stripe payment sheet',
                                 })
                             }
                         })
@@ -276,10 +279,11 @@ export default class PaymentsController {
             console.log(paymentTransactionData[0].$original.stripe_payment_id);
 
             return response.status(200).json({
-                "data": {
-                    "payment_reference_id": paymentTransactionData[0].$original.stripe_payment_id
-                },
-                "message": `Confirm Payment Done. Payment ID : ${paymentTransactionData[0].$original.stripe_payment_id}`,
+              data: {
+                payment_reference_id: paymentTransactionData[0].$original.stripe_payment_id,
+              },
+              status: 'ok',
+              message: `Confirm Payment Done. Payment ID : ${paymentTransactionData[0].$original.stripe_payment_id}`,
             })
         } catch (error) {
             return response.status(404).json({
