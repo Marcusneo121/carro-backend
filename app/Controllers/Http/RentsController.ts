@@ -354,6 +354,7 @@ export default class RentsController {
                 rentalTransactions,
                 updatedBargain,
               },
+              status: 'success',
               message: 'Host accepted guest bargain.',
             })
           }
