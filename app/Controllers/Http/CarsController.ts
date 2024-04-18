@@ -70,7 +70,7 @@ export default class CarsController {
 
     return response.status(200).json({
       data: car,
-      status:"ok",
+      status: 'ok',
       message: 'Car list retrieved successfully',
     })
   }
@@ -86,30 +86,30 @@ export default class CarsController {
         message: 'Car not found',
       })
     } else {
-        const carOriginal = findCar.$original;
+      const carOriginal = findCar.$original
 
-        const carDetails = {
-          id: carOriginal.id,
-          user_id: carOriginal.userId,
-          car_name: carOriginal.carName,
-          color: carOriginal.color,
-          engine_capacity: carOriginal.engineCapacity,
-          year_made: carOriginal.yearMade,
-          seat: carOriginal.seat,
-          location: carOriginal.location,
-          car_main_pic: carOriginal.carMainPic,
-          car_image_one: carOriginal.carImageOne,
-          car_image_two: carOriginal.carImageTwo,
-          car_image_three: carOriginal.carImageThree,
-          car_image_four: carOriginal.carImageFour,
-          car_plate: carOriginal.carPlate,
-          price: carOriginal.price,
-          available_to_date: carOriginal.availableToDate,
-          available_from_date: carOriginal.availableFromDate,
-          created_at: carOriginal.createAt,
-          updated_at: carOriginal.updateAt,
-          is_electric: carOriginal.is_electric,
-        }
+      const carDetails = {
+        id: carOriginal.id,
+        user_id: carOriginal.userId,
+        car_name: carOriginal.carName,
+        color: carOriginal.color,
+        engine_capacity: carOriginal.engineCapacity,
+        year_made: carOriginal.yearMade,
+        seat: carOriginal.seat,
+        location: carOriginal.location,
+        car_main_pic: carOriginal.carMainPic,
+        car_image_one: carOriginal.carImageOne,
+        car_image_two: carOriginal.carImageTwo,
+        car_image_three: carOriginal.carImageThree,
+        car_image_four: carOriginal.carImageFour,
+        car_plate: carOriginal.carPlate,
+        price: carOriginal.price,
+        available_to_date: carOriginal.availableToDate,
+        available_from_date: carOriginal.availableFromDate,
+        created_at: carOriginal.createAt,
+        updated_at: carOriginal.updateAt,
+        is_electric: carOriginal.is_electric,
+      }
 
       return response.status(200).json({
         data: carDetails,
@@ -237,6 +237,7 @@ export default class CarsController {
         data: {
           car,
         },
+        status: 'ok',
         message: 'Car added successfully',
       })
     } catch (error) {
