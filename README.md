@@ -4,6 +4,9 @@
 
 Carro is a P2P Car Sharing Platform. Carro allow user to rent their car out and allow Host and Guest to bargain for agreeable price. This platform consist of Web and Mobile version. This repo the Backend API developed in Node.ks with Framework Adonis.js. Mobile and Web App is in another repo (link to repo attached below).
 
+
+**CI/CD with Github Actions -> Build Docker Image and push to Google Artifact Registry and Deploy image to Google Cloud Run whenever Main branch has new commit.**
+
 **However, if I can choose again, I might use basic setup of Node.js + Express. Adonis.js is still growing, maturing. Hence quite a lot of things and feature are not mature yet. But with Adonis.js, it saved me a lot of time to setup things that I need to setup on my own with Express. Adonis.js is quite a good framework to use for beginner. Because it ease the process to setup complicated integration with technologies.**
 
 ## Technologies
