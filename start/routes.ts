@@ -23,16 +23,17 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
   return { hello: 'world' }
-})
+}).middleware(['requestLogger'])
 
-
-Route.get('/register/carro-verify-email-account/:email', 'AuthController.verifyEmail');
-Route.post('/login', 'AuthController.login')
-Route.post('/register', 'AuthController.register')
-Route.post('/register/sendEmail/:email', 'AuthController.sendEmail')
-Route.post('/register/checkUsername', 'AuthController.checkUsername')
-Route.post('/register/checkEmail', 'AuthController.checkEmail')
-Route.post('/upload/image', 'AuthController.uploadImage')
+Route.get('/register/carro-verify-email-account/:email', 'AuthController.verifyEmail').middleware([
+  'requestLogger',
+])
+Route.post('/login', 'AuthController.login').middleware(['requestLogger'])
+Route.post('/register', 'AuthController.register').middleware(['requestLogger'])
+Route.post('/register/sendEmail/:email', 'AuthController.sendEmail').middleware(['requestLogger'])
+Route.post('/register/checkUsername', 'AuthController.checkUsername').middleware(['requestLogger'])
+Route.post('/register/checkEmail', 'AuthController.checkEmail').middleware(['requestLogger'])
+Route.post('/upload/image', 'AuthController.uploadImage').middleware(['requestLogger'])
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/user/:id', 'AuthController.getUserData')
@@ -54,4 +55,4 @@ Route.group(() => {
   Route.post('/payment/find-customer', 'PaymentsController.findStripeCustomer')
   Route.post('/payment/make-payment-intent', 'PaymentsController.makePaymentIntent')
   Route.post('/payment/confirm-payment', 'PaymentsController.confirmPaymentDone')
-}).middleware(['auth'])
+}).middleware(['auth', 'requestLogger'])
