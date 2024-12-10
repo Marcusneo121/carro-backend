@@ -9,7 +9,7 @@ export default class RequestLogger {
     const startTime = process.hrtime()
 
     // Log request details
-    Logger.info(`Request: ${request.method()} ${request.url()} | IP: ${request.ip()}`)
+    // Logger.info(`Request: ${request.method()} ${request.url()} | IP: ${request.ip()}`)
 
     await next()
 
@@ -21,6 +21,8 @@ export default class RequestLogger {
     const statusCode = response.response.statusCode
 
     // Log response details
-    Logger.info(`Response: ${statusCode} | Time: ${responseTime}ms`)
+    Logger.info(
+      `Request: ${request.method()} ${request.url()} | IP: ${request.ip()} | Response: ${statusCode} | Time: ${responseTime}ms`
+    )
   }
 }

@@ -180,7 +180,13 @@ export const logger: LoggerConfig = {
   | can have huge impact on performance.
   |
   */
-  prettyPrint: Env.get('NODE_ENV') === 'development',
+  prettyPrint: {
+    colorize: true, // Enable colors
+    translateTime: 'SYS:standard', // Convert timestamp to human-readable format
+    ignore: 'pid,hostname', // Ignore pid and hostname
+    singleLine: true, // Make logs appear in a single line
+  },
+  format: '{msg}',
 }
 
 /*
