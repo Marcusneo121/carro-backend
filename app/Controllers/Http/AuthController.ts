@@ -2,7 +2,7 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import Profile from 'App/Models/Profile'
 import User from 'App/Models/User'
 import Argon2 from 'phc-argon2'
-
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import Env from '@ioc:Adonis/Core/Env'
 import fs from 'fs/promises'
 import path from 'path'
@@ -68,7 +68,100 @@ const uploadToFirebaseStorage = async (filepath, fileName: String, username: Str
 //     return imageName;
 // }
 
+//S3 Image Upload
+const s3 = new S3Client({
+  region: Env.get('AWS_REGION'),
+  credentials: {
+    accessKeyId: Env.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: Env.get('AWS_SECRET_ACCESS_KEY'),
+  },
+})
+
+const uploadToS3 = async (filepath: string, fileName: string, username: string) => {
+  try {
+    const fileContent = await fs.readFile(filepath) // Read the file from the temporary directory
+    const storagePath = `${username}/${fileName}` // Define S3 path
+
+    const uploadParams = {
+      Bucket: Env.get('AWS_S3_BUCKET_NAME'), // Your S3 bucket name
+      Key: storagePath, // S3 path
+      Body: fileContent, // File content
+      ContentType: 'image/jpeg', // Adjust this based on your image type
+      // ACL: ObjectCannedACL.public_read, // Make the file publicly readable
+    }
+
+    const command = new PutObjectCommand(uploadParams)
+    await s3.send(command)
+
+    // Construct the public URL
+    const publicUrl = `https://${Env.get('AWS_S3_BUCKET_NAME')}.s3.${Env.get(
+      'AWS_REGION'
+    )}.amazonaws.com/${storagePath}`
+    return publicUrl
+  } catch (error) {
+    console.error(error)
+    throw new Error(error.message)
+  }
+}
+
 export default class AuthController {
+  public async uploadImageS3({ request }) {
+    const uploadSchema = schema.create({
+      username: schema.string(),
+      car_brand: schema.string(),
+      model: schema.string(),
+      image1: schema.file({
+        size: '10mb',
+        extnames: ['jpg', 'gif', 'png'],
+      }),
+    })
+
+    const payload = await request.validate({
+      schema: uploadSchema,
+      messages: {
+        'car_brand.required': 'Car Brand is required',
+        'model.required': 'Car Model is required',
+        'username.required': 'Username is required',
+        'image1.required': 'Image1 is required',
+      },
+    })
+
+    if (payload) {
+      // Move image to the temporary directory
+      await payload.image1.move(Application.tmpPath('uploads'))
+
+      const imageName =
+        `${payload.username.toString()}` +
+        '_' +
+        `${payload.car_brand.toString()}` +
+        '_' +
+        `${payload.model.toString()}` +
+        '_' +
+        new Date().getUTCMonth().toString() +
+        new Date().getDate().toString() +
+        new Date().getFullYear().toString() +
+        '_' +
+        new Date().getTime().toString() +
+        '_rearview' +
+        `.${payload.image1.extname}`
+
+      // Upload to S3
+      const filepath = `tmp/uploads/${payload.image1.fileName}`
+
+      console.log(filepath)
+      const publicUrl = await uploadToS3(filepath, imageName, payload.username.toString())
+
+      if (publicUrl) {
+        console.log(publicUrl)
+        // Cleanup local temporary files
+        const files = await fs.readdir('tmp/uploads')
+        for (const file of files) {
+          await fs.unlink(path.join('tmp/uploads', file))
+        }
+      }
+    }
+  }
+
   public async uploadImage({ request }) {
     const uploadSchema = schema.create({
       username: schema.string(),

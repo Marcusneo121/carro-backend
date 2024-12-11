@@ -8,9 +8,17 @@ import { Storage } from '@google-cloud/storage'
 import Env from '@ioc:Adonis/Core/Env'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { DateTime } from 'luxon'
-// import fs from 'fs/promises';
+import fs from 'fs/promises'
 // import path from 'path';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
+const s3 = new S3Client({
+  region: Env.get('AWS_REGION'),
+  credentials: {
+    accessKeyId: Env.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: Env.get('AWS_SECRET_ACCESS_KEY'),
+  },
+})
 const storage = new Storage({
   projectId: Env.get('GCP_STORAGE_BUCKET'),
   // keyFilename: "carro-backend-storage.json",
@@ -51,6 +59,52 @@ const carImageUploader = async (image: any, payload: any, carSide: String, usern
     return result[0].metadata.mediaLink
   } catch (error) {
     console.log(error)
+    throw new Error(error.message)
+  }
+}
+
+const carImageUploaderS3 = async (image: any, payload: any, carSide: string, username: string) => {
+  try {
+    // 1. Generate Image Name
+    const imageName =
+      `${username}` +
+      '_' +
+      `${payload.car_name}` +
+      '_' +
+      `${payload.year_made}` +
+      '_' +
+      `${payload.color}` +
+      '_' +
+      new Date().getUTCMonth() +
+      new Date().getDate() +
+      new Date().getFullYear() +
+      '_' +
+      new Date().getTime() +
+      `_${carSide}` +
+      `.${image.extname}`
+
+    // 2. Define S3 Object Key (Path)
+    const storagePath = `${username}/${imageName}`
+
+    // 3. Read Image Content
+    const fileBuffer = await fs.readFile(image.tmpPath)
+
+    // 4. Upload to S3
+    const uploadParams = {
+      Bucket: Env.get('AWS_S3_BUCKET_NAME'), // Replace with your bucket name
+      Key: storagePath, // S3 object key
+      Body: fileBuffer, // File content
+      ContentType: image.type, // MIME type of the file
+    }
+
+    const command = new PutObjectCommand(uploadParams)
+    await s3.send(command)
+
+    // 5. Generate Public URL (optional based on your use case)
+    const publicUrl = `https://${uploadParams.Bucket}.s3.amazonaws.com/${storagePath}`
+    return publicUrl
+  } catch (error) {
+    console.error('Error uploading image:', error)
     throw new Error(error.message)
   }
 }
@@ -169,31 +223,31 @@ export default class CarsController {
         },
       })
 
-      const carMainViewImageURL = await carImageUploader(
+      const carMainViewImageURL = await carImageUploaderS3(
         payload.car_main_pic,
         payload,
         'mainview',
         tokenUserData.username
       )
-      const carFrontViewImageURL = await carImageUploader(
+      const carFrontViewImageURL = await carImageUploaderS3(
         payload.car_image_one,
         payload,
         'frontview',
         tokenUserData.username
       )
-      const carBackViewImageURL = await carImageUploader(
+      const carBackViewImageURL = await carImageUploaderS3(
         payload.car_image_two,
         payload,
         'backview',
         tokenUserData.username
       )
-      const carLeftViewImageURL = await carImageUploader(
+      const carLeftViewImageURL = await carImageUploaderS3(
         payload.car_image_three,
         payload,
         'lefttview',
         tokenUserData.username
       )
-      const carRightViewImageURL = await carImageUploader(
+      const carRightViewImageURL = await carImageUploaderS3(
         payload.car_image_four,
         payload,
         'rightview',

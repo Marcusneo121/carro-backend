@@ -33,7 +33,7 @@ Route.post('/register', 'AuthController.register').middleware(['morgan'])
 Route.post('/register/sendEmail/:email', 'AuthController.sendEmail').middleware(['morgan'])
 Route.post('/register/checkUsername', 'AuthController.checkUsername').middleware(['morgan'])
 Route.post('/register/checkEmail', 'AuthController.checkEmail').middleware(['morgan'])
-Route.post('/upload/image', 'AuthController.uploadImage').middleware(['morgan'])
+Route.post('/upload/image', 'AuthController.uploadImageS3').middleware(['morgan'])
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
   Route.get('/user/:id', 'AuthController.getUserData')
